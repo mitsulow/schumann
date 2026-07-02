@@ -387,6 +387,59 @@
     position: absolute; top: 0.1rem; transform: translateX(-50%);
     font-size: 0.85rem; color: #ff8fb1; font-weight: 700; white-space: nowrap;
   }
+  /* ★ オトヒカリ地球儀 (トップ) */
+  .globe-wrap {
+    margin-bottom: 1.2rem;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(127, 239, 176, 0.25);
+    box-shadow: 0 0 40px rgba(127, 239, 176, 0.08);
+    line-height: 0;
+  }
+  .globe-wrap iframe {
+    width: 100%;
+    height: min(78vh, 660px);
+    min-height: 420px;
+    border: none;
+    display: block;
+    background: #050510;
+  }
+  /* ★ 折りたたみセクション */
+  details.fold {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(124, 249, 212, 0.15);
+    border-radius: 14px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  details.fold > summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 1.05rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    letter-spacing: 0.05em;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+  }
+  details.fold > summary:hover { background: rgba(240, 198, 116, 0.06); }
+  details.fold > summary::-webkit-details-marker { display: none; }
+  details.fold > summary::before {
+    content: "▶";
+    font-size: 0.7em;
+    color: rgba(124, 249, 212, 0.7);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  details.fold[open] > summary::before { transform: rotate(90deg); }
+  details.fold[open] > summary { border-bottom: 1px solid rgba(124, 249, 212, 0.12); }
+  details.fold > :not(summary) { margin-left: 0.8rem; margin-right: 0.8rem; }
+  details.fold > section, details.fold > .graph-section, details.fold > h2 { margin-top: 1rem; }
+  details.fold > :last-child:not(summary) { margin-bottom: 1rem; }
   .graph-description { padding: 2rem; }
   .graph-description h3 {
     font-family: "Cormorant Garamond", serif;
@@ -458,25 +511,15 @@
     </div>
   </header>
 
-  <div class="disclaimer">
-    <strong>※ 数値はトムスク大学の周波数グラフをピクセル解析で自動読み取りしたものです。</strong>
-    観測所側のデータ欠損時は信頼度（緑・黄・赤のバー）が下がります。元データは下部の「② Frequency」グラフで確認できます。
-  </div>
+  <!-- ★★ オトヒカリ: 光の音柱 (このサイトの顔) ★★ -->
+  <section class="globe-wrap">
+    <iframe src="./globe.html" title="オトヒカリ — 光の音柱" allow="gyroscope"></iframe>
+  </section>
 
   <div class="error-banner" id="error-banner">データ取得中にエラーが発生しました。</div>
 
-  <div class="polarization-banner" id="polarization-banner">
-    <div class="polarization-info">
-      <div class="rotation-viz" id="rotation-viz"></div>
-      <div class="polarization-text">
-        <h3 id="polarization-state">計測中…</h3>
-        <p id="polarization-desc">シューマン共振の磁場偏光は、昼は右回転、夜は左回転に切り替わります（Sentman 1987）</p>
-      </div>
-    </div>
-    <div class="polarization-meta" id="polarization-meta">
-      JST --:--<br>TOMSK --:--
-    </div>
-  </div>
+  <details class="fold">
+    <summary>📈 シューマン共振のいま — F1詳細・24時間推移・F2〜F4</summary>
 
   <!-- ★ F1 ヒーロー: このサイトの主役 = 第一次モード -->
   <section class="f1-hero">
@@ -500,27 +543,10 @@
     <div class="modes-grid" id="modes-grid"></div>
   </section>
 
-  <div class="manual-panel">
-    <h3>Manual Tuner</h3>
-    <div class="manual-sub">任意の周波数を入力して、可聴域に変換して聴く</div>
-    <div class="manual-row">
-      <input type="number" class="manual-input" id="manual-hz" placeholder="例：7.88" step="0.01" min="0.1" max="10000" value="7.83">
-      <div class="manual-octave">
-        <span>×2^</span>
-        <input type="number" id="manual-oct" value="6" min="0" max="12" step="1">
-        <span>オクターブ</span>
-      </div>
-      <button class="manual-btn" id="manual-btn">▶ PLAY</button>
-    </div>
-    <div class="manual-display">
-      入力: <strong id="manual-in">7.83</strong> Hz  →  再生: <strong id="manual-out">501.12</strong> Hz
-    </div>
-  </div>
+  </details>
 
-  <div class="observation" id="observation" style="display:none;">
-    <strong>自動観察メモ：</strong>
-    <span id="observation-text"></span>
-  </div>
+  <details class="fold">
+    <summary>🌍 トムスク観測所の4つの窓 — スペクトログラム・周波数・振幅・Q値</summary>
 
   <h2 class="section-title">
     <span>4つの窓から見る地球の磁気圏</span>
@@ -633,6 +659,53 @@
     </article>
 
   </div>
+
+  </details>
+
+  <details class="fold">
+    <summary>🔬 その他 — 磁場の回転・音で聴く・観察メモ・このサイトについて</summary>
+
+    <div class="polarization-banner" id="polarization-banner">
+      <div class="polarization-info">
+        <div class="rotation-viz" id="rotation-viz"></div>
+        <div class="polarization-text">
+          <h3 id="polarization-state">計測中…</h3>
+          <p id="polarization-desc">シューマン共振の磁場偏光は、昼は右回転、夜は左回転に切り替わります（Sentman 1987）</p>
+        </div>
+      </div>
+      <div class="polarization-meta" id="polarization-meta">
+        JST --:--<br>TOMSK --:--
+      </div>
+    </div>
+
+    <div class="manual-panel">
+      <h3>Manual Tuner</h3>
+      <div class="manual-sub">任意の周波数を入力して、可聴域に変換して聴く</div>
+      <div class="manual-row">
+        <input type="number" class="manual-input" id="manual-hz" placeholder="例：7.88" step="0.01" min="0.1" max="10000" value="7.83">
+        <div class="manual-octave">
+          <span>×2^</span>
+          <input type="number" id="manual-oct" value="6" min="0" max="12" step="1">
+          <span>オクターブ</span>
+        </div>
+        <button class="manual-btn" id="manual-btn">▶ PLAY</button>
+      </div>
+      <div class="manual-display">
+        入力: <strong id="manual-in">7.83</strong> Hz  →  再生: <strong id="manual-out">501.12</strong> Hz
+      </div>
+    </div>
+
+    <div class="observation" id="observation" style="display:none;">
+      <strong>自動観察メモ：</strong>
+      <span id="observation-text"></span>
+    </div>
+
+    <div class="disclaimer">
+      <strong>※ 数値はトムスク大学の周波数グラフをピクセル解析で自動読み取りしたものです。</strong>
+      観測所側のデータ欠損時は信頼度（緑・黄・赤のバー）が下がります。元データは「4つの窓」の「② Frequency」グラフで確認できます。
+    </div>
+
+  </details>
 
   <footer>
     <p>DATA SOURCE: Tomsk State University (sos70.ru) / ANALYSIS: Deterministic Pixel Extraction v6</p>
@@ -1077,6 +1150,13 @@
   setInterval(() => { refreshGraphImages(); buildJstOverlays(); }, 5 * 60 * 1000);
   window.addEventListener("resize", () => buildJstOverlays());
   window.addEventListener("load", () => buildJstOverlays());
+
+  // 折りたたみを開いた瞬間に、隠れていた間サイズ0だったオーバーレイ等を再計算
+  document.querySelectorAll("details.fold").forEach(d => {
+    d.addEventListener("toggle", () => {
+      if (d.open) { buildJstOverlays(); drawSparkline(); }
+    });
+  });
 </script>
 
 </body>
