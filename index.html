@@ -68,22 +68,19 @@
     filter: none;
   }
   .hero-dark .mmm-logo .bolt { filter: drop-shadow(0 0 6px rgba(82, 250, 140, 0.6)); }
-  .mmm-sub {
+  .site-title {
     font-family: "Cinzel", serif;
-    font-weight: 500;
-    font-size: clamp(0.62rem, 2.6vw, 0.95rem);
-    letter-spacing: 0.42em;
-    text-indent: 0.42em;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 6vw, 2.3rem);
+    letter-spacing: 0.16em;
+    text-indent: 0.16em;
     color: #52fa8c;
-    text-shadow: 0 0 10px rgba(82, 250, 140, 0.45);
-    margin-top: 0.3rem;
+    text-shadow: 0 0 16px rgba(82, 250, 140, 0.55), 0 0 44px rgba(82, 250, 140, 0.25);
     white-space: nowrap;
+    line-height: 1.2;
   }
   .hero-dark .globe-f1 .gf1-label { color: #7d829a; }
-  .hero-dark .globe-f1 .gf1-value {
-    color: #7cf9d4;
-    text-shadow: 0 0 26px rgba(124, 249, 212, 0.45);
-  }
+  .hero-dark #f1-spark-top { background: #42464f; } /* 鼠色 (黒バンド内) */
   .hero-dark .gf1-play {
     border-color: rgba(124, 249, 212, 0.55);
     background: radial-gradient(circle at 36% 32%, #123630, #0a1f1c 65%, #061412);
@@ -114,10 +111,11 @@
     line-height: 1.25;
   }
   .mmm-logo .bolt { font-size: clamp(1rem, 4vw, 1.4rem); filter: drop-shadow(0 1px 3px rgba(200, 150, 30, 0.5)); }
+  .mmm-logo { margin-top: 0.25rem; }
   .mmm-logo .mmm-text {
     font-family: "Cinzel", serif;
     font-weight: 700;
-    font-size: clamp(1.05rem, 4.4vw, 1.7rem);
+    font-size: clamp(0.72rem, 3vw, 1.05rem);
     letter-spacing: 0.28em;
     background: linear-gradient(160deg, #c9a24a 8%, #8a6716 45%, #e2c070 70%, #7a5a12 100%);
     -webkit-background-clip: text;
@@ -126,6 +124,7 @@
     filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.7));
     white-space: nowrap;
   }
+  .mmm-logo .bolt { font-size: clamp(0.7rem, 2.8vw, 1rem) !important; }
   h1 {
     font-family: "Cormorant Garamond", serif;
     font-size: clamp(2.2rem, 5vw, 3.8rem);
@@ -437,6 +436,16 @@
     position: absolute; right: 2px; top: 50%; transform: translateY(-50%);
     color: rgba(240, 198, 116, 0.85); line-height: 1;
   }
+  /* 画像上端: 観測所側の日付 (バグで狂っている) を黒で隠し、正しい JST 日付を描く */
+  .jst-cover-top {
+    position: absolute; left: 0; top: 0; width: 100%;
+    background: #000; overflow: hidden;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .jst-cover-top .jc-date {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    color: #e8c878; font-weight: 700; white-space: nowrap; line-height: 1;
+  }
   .jst-below {
     position: relative; width: 100%; height: 1.6rem; margin-top: 2px;
     font-family: "JetBrains Mono", monospace; user-select: none; line-height: 1;
@@ -467,6 +476,7 @@
   .globe-f1 {
     text-align: center;
     padding: 0.9rem 0 0.2rem;
+    position: relative;
   }
   .globe-f1 .gf1-label {
     display: block;
@@ -477,13 +487,27 @@
   }
   .globe-f1 .gf1-value {
     font-family: "Cinzel", serif;
-    font-size: clamp(2.6rem, 10vw, 4rem);
+    font-size: clamp(2rem, 7.5vw, 3rem);
     font-weight: 700;
-    color: #0c8a68;
-    text-shadow: 0 0 22px rgba(20, 168, 124, 0.3);
+    color: #52fa8c;
+    text-shadow: 0 0 16px rgba(82, 250, 140, 0.55), 0 0 44px rgba(82, 250, 140, 0.25);
     line-height: 1;
   }
-  .globe-f1 .gf1-unit { margin-left: 0.12em; }
+  .globe-f1 .gf1-unit { margin-left: 0.12em; font-size: 0.7em; }
+  .gf1-note {
+    display: inline-block;
+    font-size: 0.68rem;
+    color: #7d829a;
+    margin-top: 1.1rem;
+    letter-spacing: 0.04em;
+  }
+  .gf1-leader {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
   .globe-f1 .gf1-row {
     display: flex;
     align-items: center;
@@ -795,8 +819,8 @@
   <div class="hero-inner">
 
     <header>
+      <div class="site-title">SCHUMANN RESONANCE</div>
       <div class="mmm-logo"><span class="bolt">⚡</span><span class="mmm-text">MASTER MIND MEMBERS</span><span class="bolt">⚡</span></div>
-      <div class="mmm-sub">SCHUMANN RESONANCE NOW</div>
       <div class="last-update">
         <span class="live-dot"></span>
         <span id="last-update">Loading...</span>
@@ -809,22 +833,23 @@
     </section>
 
     <div class="globe-f1">
-      <span class="gf1-label">今のシューマン共振</span>
+      <span class="gf1-label">現在のシューマン共振の値</span>
       <div class="gf1-row">
         <button id="gf1-play" class="gf1-play" type="button">▶</button>
         <span class="gf1-value" id="globe-f1-value">—.——</span><span class="gf1-value gf1-unit">Hz</span>
       </div>
+      <div class="gf1-note" id="gf1-note">6オクターブ上の可聴域 <span id="gf1-aud">—</span>Hz の音が鳴ります</div>
+      <svg class="gf1-leader" id="gf1-leader"></svg>
+    </div>
+
+    <div class="spark-wrap">
+      <canvas id="f1-spark-top" width="900" height="150"></canvas>
     </div>
 
   </div>
 </div>
 
 <div class="wrap">
-
-  <!-- 鼠色グラフは白背景の上でこそ映える -->
-  <div class="spark-wrap">
-    <canvas id="f1-spark-top" width="900" height="150"></canvas>
-  </div>
 
   <div class="error-banner" id="error-banner">データ取得中にエラーが発生しました。</div>
 
@@ -907,10 +932,6 @@
           </div>
           <div class="jst-below"></div>
         </div>
-        <div class="jst-hint">
-          ⏰ <em>時刻目盛りは日本時間（JST）に変換済み・日付と▲今はグラフ下</em><br>
-          グラフ内の目盛りはトムスク時間（日本 −2時間）
-        </div>
       </div>
       <div class="graph-description">
         <h3>① Spectrogram</h3>
@@ -928,10 +949,6 @@
             <div class="jst-cover"></div>
           </div>
           <div class="jst-below"></div>
-        </div>
-        <div class="jst-hint">
-          ⏰ <em>時刻目盛りは日本時間（JST）に変換済み・日付と▲今はグラフ下</em><br>
-          このグラフが数値読み取りのメインソース
         </div>
       </div>
       <div class="graph-description">
@@ -951,10 +968,6 @@
           </div>
           <div class="jst-below"></div>
         </div>
-        <div class="jst-hint">
-          ⏰ <em>時刻目盛りは日本時間（JST）に変換済み・日付と▲今はグラフ下</em><br>
-          3大雷活動ピーク: 東南アジア→JST17時 / アフリカ→JST24時 / 南米→翌JST6時 ごろ
-        </div>
       </div>
       <div class="graph-description">
         <h3>③ Amplitude</h3>
@@ -972,9 +985,6 @@
             <div class="jst-cover"></div>
           </div>
           <div class="jst-below"></div>
-        </div>
-        <div class="jst-hint">
-          ⏰ <em>時刻目盛りは日本時間（JST）に変換済み・日付と▲今はグラフ下</em>
         </div>
       </div>
       <div class="graph-description">
@@ -1165,6 +1175,9 @@
     // ▶ ボタンの再生周波数も最新値に (鳴らしたままなら滑らかに追従)
     gf1Freq = (hz != null ? hz : 7.83) * 64;
     if (gf1Bowl) retuneBowl(gf1Bowl, gf1Freq);
+    const aud = document.getElementById("gf1-aud");
+    if (aud) aud.textContent = gf1Freq.toFixed(1);
+    drawGf1Leader();
     const confClass = conf >= 75 ? "high" : conf >= 50 ? "mid" : "low";
     fill.className = "confidence-fill " + confClass;
     fill.style.width = conf + "%";
@@ -1488,6 +1501,29 @@
     }
   });
 
+  // ===== 注釈線: 「音が鳴ります」の文字の上端から ▶ ボタンへ =====
+  function drawGf1Leader() {
+    const box = document.querySelector(".globe-f1");
+    const svg = document.getElementById("gf1-leader");
+    const btn = document.getElementById("gf1-play");
+    const note = document.getElementById("gf1-note");
+    if (!box || !svg || !btn || !note) return;
+    const b = box.getBoundingClientRect();
+    const r = btn.getBoundingClientRect();
+    const n = note.getBoundingClientRect();
+    if (!b.width) return;
+    svg.setAttribute("viewBox", "0 0 " + b.width + " " + b.height);
+    const x1 = n.left - b.left + 10;              // 注釈テキストの左上あたり
+    const y1 = n.top - b.top - 2;
+    const x2 = r.left - b.left + r.width / 2;     // ▶ ボタンの真下
+    const y2 = r.bottom - b.top + 3;
+    svg.innerHTML = '<path d="M ' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2 +
+      '" stroke="rgba(82,250,140,0.45)" stroke-width="1" fill="none"/>' +
+      '<circle cx="' + x2 + '" cy="' + y2 + '" r="2" fill="rgba(82,250,140,0.6)"/>';
+  }
+  window.addEventListener("resize", drawGf1Leader);
+  window.addEventListener("load", drawGf1Leader);
+
   // ===== トップの ▶ ボタン: 今の F1 を可聴域 (6オクターブ上 = ×64) で鳴らす =====
   let gf1Bowl = null;
   let gf1Freq = 7.83 * 64;
@@ -1583,8 +1619,9 @@
   // レイアウト実測値: プロット x 範囲 (3日=72時間) と、時刻ラベル帯の縦位置
   const AXIS_UTC_OFFSET = 8;
   const RULER_METRICS = {
-    line: { w: 1006, h: 340, x0: 71, x1: 935, coverTop: 311 },  // srf / sra / srq 共通
-    shm:  { w: 1540, h: 460, x0: 61, x1: 1503, coverTop: 440 }  // スペクトログラム
+    // coverTop = 下端時刻ラベル帯の開始y / topH = 上端の日付表記帯の高さ (観測所側の日付はバグで狂っているため隠す)
+    line: { w: 1006, h: 340, x0: 71, x1: 935, coverTop: 311, topH: 28 },  // srf / sra / srq 共通
+    shm:  { w: 1540, h: 460, x0: 61, x1: 1503, coverTop: 440, topH: 26 }  // スペクトログラム
   };
 
   function buildJstOverlays() {
@@ -1614,6 +1651,16 @@
       cover.style.height = Math.max(stripPx, fs + 4) + "px";
       cover.innerHTML = "";
       below.innerHTML = "";
+      // 上端カバー: 観測所側の狂った日付を隠して JST 日付を描く
+      let coverTop = wrap.querySelector(".jst-cover-top");
+      if (!coverTop) {
+        coverTop = document.createElement("div");
+        coverTop.className = "jst-cover-top";
+        wrap.querySelector(".jst-imgbox").appendChild(coverTop);
+      }
+      coverTop.style.fontSize = fs + "px";
+      coverTop.style.height = Math.max(m.topH / m.h * dispH, fs + 4) + "px";
+      coverTop.innerHTML = "";
 
       const tag = document.createElement("div");
       tag.className = "jc-tag";
@@ -1625,13 +1672,13 @@
         const jst = new Date(day1Utc + g * 3600e3 + 9 * 3600e3);
         const h = jst.getUTCHours();
         if (g === 0 || h === 0) {
-          // 日付は画像の下に大きく
+          // 日付は画像の上端 (観測所の狂った日付の上に正しい JST 日付)
           const d = document.createElement("div");
-          d.className = "jb-date";
+          d.className = "jc-date";
           d.style.left = pos(g) + "%";
           d.textContent = (jst.getUTCMonth() + 1) + "/" + jst.getUTCDate() +
             "(" + "日月火水木金土"[jst.getUTCDay()] + ")";
-          below.appendChild(d);
+          coverTop.appendChild(d);
           if (g === 0) continue;
         }
         if (h % stepH !== 0) continue;
