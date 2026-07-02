@@ -318,33 +318,74 @@
     line-height: 1.6;
   }
   .jst-hint em { color: var(--text-muted); font-style: normal; }
-  /* 日本時刻ルーラー (画像の下に JST 目盛りを重ねる) */
-  .jst-graph { display: inline-block; max-width: 100%; position: relative; }
-  .jst-graph img { margin: 0 auto; }
-  .jst-ruler {
-    position: relative; width: 100%; height: 36px; margin-top: 2px;
-    font-family: "JetBrains Mono", monospace; user-select: none;
+  /* ★ F1 ヒーロー */
+  .f1-hero {
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(124, 249, 212, 0.07), transparent 65%),
+                rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(124, 249, 212, 0.25);
+    border-radius: 18px;
+    padding: 1.8rem 1.2rem 1.4rem;
+    margin-bottom: 2rem;
   }
-  .jst-tick {
-    position: absolute; top: 0; transform: translateX(-50%);
-    font-size: 0.6rem; color: #7cf9d4; text-align: center; line-height: 1.1;
+  .f1-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.7rem; letter-spacing: 0.3em;
+    color: var(--accent-gold); margin-bottom: 0.4rem;
   }
-  .jst-tick::before {
-    content: ''; display: block; width: 1px; height: 5px;
-    background: rgba(124, 249, 212, 0.7); margin: 0 auto 1px;
+  .f1-value {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(3.2rem, 12vw, 5.5rem);
+    font-weight: 700; color: #7cf9d4; line-height: 1;
+    text-shadow: 0 0 30px rgba(124, 249, 212, 0.35);
+    font-variant-numeric: tabular-nums;
   }
-  .jst-date {
-    position: absolute; top: 20px; transform: translateX(-50%);
-    font-size: 0.6rem; color: var(--accent-gold); font-weight: 700;
-    white-space: nowrap;
+  .f1-unit { font-size: 0.35em; color: var(--text-muted); margin-left: 0.3em; }
+  .f1-meta { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.7; }
+  .f1-meta .up { color: #ff8fb1; }
+  .f1-meta .down { color: #8fb1ff; }
+  .f1-meta .flat { color: #7cf9d4; }
+  .f1-confrow { margin-top: 0.7rem; }
+  .f1-conf-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.6rem; color: var(--text-muted); margin-top: 0.3rem; letter-spacing: 0.15em;
   }
-  .jst-now {
-    position: absolute; top: 14px; transform: translateX(-50%);
-    font-size: 0.58rem; color: #ff8fb1; font-weight: 700; white-space: nowrap;
+  #f1-spark {
+    width: 100%; max-width: 900px; height: auto;
+    margin-top: 1rem; border-radius: 10px;
+    background: rgba(0, 0, 0, 0.35);
   }
-  .jst-tag {
-    position: absolute; left: 0; top: 0;
-    font-size: 0.55rem; color: var(--text-muted); letter-spacing: 0.1em;
+  .f1-spark-label { font-size: 0.65rem; color: var(--text-muted); margin-top: 0.3rem; }
+  .f1-play { margin-top: 1rem; }
+  /* ★ 日本時刻オーバーレイ:
+     画像内のトムスク時刻目盛りを黒で隠し、同じ位置に JST を直接描く */
+  .jst-graph { display: inline-block; max-width: 100%; }
+  .jst-imgbox { position: relative; line-height: 0; }
+  .jst-imgbox img { margin: 0; }
+  .jst-cover {
+    position: absolute; left: 0; width: 100%; bottom: 0;
+    background: #000; overflow: hidden;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .jst-cover .jc-hour {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    color: #7cf9d4; line-height: 1; white-space: nowrap;
+  }
+  .jst-cover .jc-tag {
+    position: absolute; right: 2px; top: 50%; transform: translateY(-50%);
+    color: rgba(240, 198, 116, 0.85); line-height: 1;
+  }
+  .jst-below {
+    position: relative; width: 100%; height: 1.6rem; margin-top: 2px;
+    font-family: "JetBrains Mono", monospace; user-select: none; line-height: 1;
+  }
+  .jst-below .jb-date {
+    position: absolute; top: 0.15rem; transform: translateX(-50%);
+    font-size: 0.85rem; color: var(--accent-gold); font-weight: 700; white-space: nowrap;
+  }
+  .jst-below .jb-now {
+    position: absolute; top: 0.1rem; transform: translateX(-50%);
+    font-size: 0.85rem; color: #ff8fb1; font-weight: 700; white-space: nowrap;
   }
   .graph-description { padding: 2rem; }
   .graph-description h3 {
@@ -437,6 +478,24 @@
     </div>
   </div>
 
+  <!-- ★ F1 ヒーロー: このサイトの主役 = 第一次モード -->
+  <section class="f1-hero">
+    <div class="f1-label">F1 — FUNDAMENTAL MODE ・ 地球の基音</div>
+    <div class="f1-value">
+      <span id="f1-big">—.——</span><span class="f1-unit">Hz</span>
+    </div>
+    <div class="f1-meta" id="f1-meta">基準 7.83 Hz ・ 読み取り待ち…</div>
+    <div class="f1-confrow">
+      <div class="confidence-bar" style="max-width:280px;margin:0 auto;">
+        <div class="confidence-fill low" id="f1-conf-fill" style="width:0%"></div>
+      </div>
+      <div class="f1-conf-label" id="f1-conf-label">CONFIDENCE —</div>
+    </div>
+    <canvas id="f1-spark" width="900" height="150"></canvas>
+    <div class="f1-spark-label" id="f1-spark-label">過去24時間の F1 推移（15分ごと・日本時間）</div>
+    <button class="play-btn f1-play" id="f1-play">▶ いまの地球の音を聴く</button>
+  </section>
+
   <section>
     <div class="modes-grid" id="modes-grid"></div>
   </section>
@@ -473,18 +532,21 @@
     <article class="graph-card">
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="shm">
-          <img src="https://mitsulow.github.io/0Lei/latest_spectrogram.jpg" alt="スペクトログラム" onerror="this.src='https://sos70.ru/provider.php?file=shm.jpg'">
-          <div class="jst-ruler"></div>
+          <div class="jst-imgbox">
+            <img src="https://mitsulow.github.io/0Lei/latest_spectrogram.jpg" alt="スペクトログラム" onerror="this.src='https://sos70.ru/provider.php?file=shm.jpg'">
+            <div class="jst-cover"></div>
+          </div>
+          <div class="jst-below"></div>
         </div>
         <div class="jst-hint">
-          ⏰ <em>下の緑の目盛りが日本時間（JST）</em><br>
+          ⏰ <em>時刻目盛りは日本時間（JST）に変換済み・日付と▲今はグラフ下</em><br>
           グラフ内の目盛りはトムスク時間（日本 −2時間）
         </div>
       </div>
       <div class="graph-description">
         <h3>① Spectrogram</h3>
         <div class="graph-sub">周波数 × 時間 × 強度</div>
-        <p>横軸は時刻（UTC）、縦軸は周波数（Hz）、色の明るさがパワーを表します。横に走る4〜5本の明るい帯が F1〜F5 のモード。帯の太さや鋭さから、各モードの安定度が読めます。</p>
+        <p>横軸は時刻、縦軸は周波数（Hz）、色の明るさがパワーを表します。横に走る4本の明るい帯が F1〜F4 のモード。帯の太さや鋭さから、各モードの安定度が読めます。</p>
         <p>縦方向に走る明るい線は、Q-burst と呼ばれる巨大雷放電の痕跡。全帯域で一斉にパワーが跳ね上がる瞬間です。</p>
         <div class="mmm-note">
           <h4>MMM との関わり</h4>
@@ -496,18 +558,21 @@
     <article class="graph-card">
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
-          <img src="https://mitsulow.github.io/0Lei/latest_linegraph.jpg" alt="周波数グラフ" onerror="this.src='https://sos70.ru/provider.php?file=srf.jpg'">
-          <div class="jst-ruler"></div>
+          <div class="jst-imgbox">
+            <img src="https://mitsulow.github.io/0Lei/latest_linegraph.jpg" alt="周波数グラフ" onerror="this.src='https://sos70.ru/provider.php?file=srf.jpg'">
+            <div class="jst-cover"></div>
+          </div>
+          <div class="jst-below"></div>
         </div>
         <div class="jst-hint">
-          ⏰ <em>下の緑の目盛りが日本時間（JST）</em><br>
+          ⏰ <em>時刻目盛りは日本時間（JST）に変換済み・日付と▲今はグラフ下</em><br>
           このグラフが数値読み取りのメインソース
         </div>
       </div>
       <div class="graph-description">
         <h3>② Frequency</h3>
         <div class="graph-sub">各モードの中心周波数の推移（メイン）</div>
-        <p>理論値は F1: 7.83Hz, F2: 14.1Hz, F3: 20.3Hz, F4: 26.4Hz, F5: 33.8Hz。周波数の変動は主に電離層の形状・高さに依存します。空洞のサイズが変わると共振周波数が動く。</p>
+        <p>理論値は F1: 7.83Hz, F2: 14.1Hz, F3: 20.3Hz, F4: 26.4Hz。周波数の変動は主に電離層の形状・高さに依存します。空洞のサイズが変わると共振周波数が動く。<em>※ F5 (33.8Hz) はこのグラフに含まれないため、当サイトでは扱いません。</em></p>
         <p>F1 はQ値が低く変動幅が大きい、F3 はQ値が高く細い線で安定——という個性が現れます。<strong>上部の数値はこのグラフから自動読み取りしています。</strong></p>
         <div class="mmm-note">
           <h4>MMM との関わり</h4>
@@ -519,11 +584,14 @@
     <article class="graph-card">
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
-          <img src="https://sos70.ru/provider.php?file=sra.jpg" alt="振幅グラフ">
-          <div class="jst-ruler"></div>
+          <div class="jst-imgbox">
+            <img src="https://sos70.ru/provider.php?file=sra.jpg" alt="振幅グラフ">
+            <div class="jst-cover"></div>
+          </div>
+          <div class="jst-below"></div>
         </div>
         <div class="jst-hint">
-          ⏰ <em>下の緑の目盛りが日本時間（JST）</em><br>
+          ⏰ <em>時刻目盛りは日本時間（JST）に変換済み・日付と▲今はグラフ下</em><br>
           3大雷活動ピーク: 東南アジア→JST17時 / アフリカ→JST24時 / 南米→翌JST6時 ごろ
         </div>
       </div>
@@ -542,11 +610,14 @@
     <article class="graph-card">
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
-          <img src="https://sos70.ru/provider.php?file=srq.jpg" alt="Q値グラフ">
-          <div class="jst-ruler"></div>
+          <div class="jst-imgbox">
+            <img src="https://sos70.ru/provider.php?file=srq.jpg" alt="Q値グラフ">
+            <div class="jst-cover"></div>
+          </div>
+          <div class="jst-below"></div>
         </div>
         <div class="jst-hint">
-          ⏰ <em>下の緑の目盛りが日本時間（JST）</em>
+          ⏰ <em>時刻目盛りは日本時間（JST）に変換済み・日付と▲今はグラフ下</em>
         </div>
       </div>
       <div class="graph-description">
@@ -576,13 +647,14 @@
 </div>
 
 <script>
+  // F5 は観測グラフに存在しない (読み取り不能) ため扱わない
   const MODE_INFO = {
     F1: { name: "Fundamental", theory: 7.83 },
     F2: { name: "Second harmonic", theory: 14.1 },
     F3: { name: "Third harmonic", theory: 20.3 },
     F4: { name: "Fourth harmonic", theory: 26.4 },
-    F5: { name: "Fifth harmonic", theory: 33.8 },
   };
+  const SUB_MODES = ["F2", "F3", "F4"];
 
   // === Audio ===
   let audioCtx = null;
@@ -653,7 +725,7 @@
   function renderPolarizationFallback() {
     const now = new Date();
     const jstHour = (now.getUTCHours() + 9) % 24 + now.getUTCMinutes() / 60;
-    const tomskHour = (now.getUTCHours() + 5.6) % 24 + now.getUTCMinutes() / 60;
+    const tomskHour = (now.getUTCHours() + 7) % 24 + now.getUTCMinutes() / 60;
     const isDay = jstHour >= 6 && jstHour <= 18;
     renderPolarization({
       state: isDay ? "right" : "left",
@@ -676,6 +748,7 @@
       hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo"
     }).format(ts);
     document.getElementById("last-update").textContent = "UPDATED " + jst + " JST";
+    renderF1(data);
     renderModes(data.modes);
     if (data.polarization) renderPolarization(data.polarization);
     if (data.notes) {
@@ -684,10 +757,97 @@
     }
   }
 
+  // ===== F1 ヒーロー =====
+  let f1PlayWired = false;
+  function renderF1(data) {
+    const mode = data.modes && data.modes.F1 || {};
+    const hz = mode.hz;
+    const conf = mode.confidence ?? 0;
+    const big = document.getElementById("f1-big");
+    const meta = document.getElementById("f1-meta");
+    const fill = document.getElementById("f1-conf-fill");
+    const clabel = document.getElementById("f1-conf-label");
+    if (hz != null) {
+      big.textContent = hz.toFixed(2);
+      const dev = hz - 7.83;
+      const cls = Math.abs(dev) < 0.05 ? "flat" : dev > 0 ? "up" : "down";
+      const arrow = Math.abs(dev) < 0.05 ? "≈" : dev > 0 ? "▲" : "▼";
+      const age = data.data_age_min && data.data_age_min.F1;
+      meta.innerHTML = "基準 7.83 Hz に対して <span class='" + cls + "'>" + arrow + " " +
+        (dev >= 0 ? "+" : "") + dev.toFixed(2) + " Hz</span>" +
+        (age != null ? "<br>観測データ: " + age + "分前 (トムスク)" : "");
+    } else {
+      big.textContent = "—.——";
+      meta.textContent = "F1 データ欠損中 (観測所側)";
+    }
+    const confClass = conf >= 75 ? "high" : conf >= 50 ? "mid" : "low";
+    fill.className = "confidence-fill " + confClass;
+    fill.style.width = conf + "%";
+    clabel.textContent = "CONFIDENCE " + conf + "%" +
+      (mode.calibration === "ocr" ? " ・ 軸OCR検証済" : "");
+    const btn = document.getElementById("f1-play");
+    const playHz = (hz != null ? hz : 7.83) * 64;
+    btn.dataset.freq = playHz;
+    if (!f1PlayWired) {
+      f1PlayWired = true;
+      btn.addEventListener("click", () =>
+        toggleTone("F1hero", parseFloat(btn.dataset.freq), btn));
+    }
+    drawSparkline();
+  }
+
+  // ===== 過去24時間スパークライン =====
+  let sparkCache = null;
+  let sparkCacheAt = 0;
+  async function drawSparkline() {
+    try {
+      if (!sparkCache || Date.now() - sparkCacheAt > 14 * 60 * 1000) {
+        const res = await fetch("https://mitsulow.github.io/0Lei/schumann_history.json?t=" + Date.now());
+        if (!res.ok) return;
+        sparkCache = await res.json();
+        sparkCacheAt = Date.now();
+      }
+      const hist = sparkCache.filter(e => e.F1 != null).slice(-96); // 15分×96 = 24h
+      if (hist.length < 4) return;
+      const cv = document.getElementById("f1-spark");
+      const ctx = cv.getContext("2d");
+      const W = cv.width, H = cv.height, PAD = 28;
+      ctx.clearRect(0, 0, W, H);
+      const vals = hist.map(e => e.F1);
+      let lo = Math.min(...vals, 7.83), hi = Math.max(...vals, 7.83);
+      const m = (hi - lo) * 0.15 + 0.02;
+      lo -= m; hi += m;
+      const x = i => PAD + (W - PAD * 2) * i / (hist.length - 1);
+      const y = v => H - 18 - (H - 30) * (v - lo) / (hi - lo);
+      // 基準線 7.83
+      ctx.strokeStyle = "rgba(240,198,116,0.5)";
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath(); ctx.moveTo(PAD, y(7.83)); ctx.lineTo(W - PAD, y(7.83)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = "rgba(240,198,116,0.8)";
+      ctx.font = "11px monospace";
+      ctx.fillText("7.83", 2, y(7.83) + 4);
+      // F1 ライン
+      ctx.strokeStyle = "#7cf9d4";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      hist.forEach((e, i) => { i ? ctx.lineTo(x(i), y(e.F1)) : ctx.moveTo(x(i), y(e.F1)); });
+      ctx.stroke();
+      // 最新点
+      const last = hist[hist.length - 1];
+      ctx.fillStyle = "#7cf9d4";
+      ctx.beginPath();
+      ctx.arc(x(hist.length - 1), y(last.F1), 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.font = "13px monospace";
+      ctx.fillText(last.F1.toFixed(2), Math.min(x(hist.length - 1) + 8, W - 44), y(last.F1) - 8);
+    } catch (e) { /* sparkline は飾りなので静かに諦める */ }
+  }
+
   function renderModes(modes) {
     const grid = document.getElementById("modes-grid");
     grid.innerHTML = "";
-    ["F1", "F2", "F3", "F4", "F5"].forEach(key => {
+    SUB_MODES.forEach(key => {
       const mode = modes?.[key] || {};
       const hz = mode.hz;
       const conf = mode.confidence ?? 0;
@@ -728,7 +888,7 @@
   function renderModesFromTheory() {
     const grid = document.getElementById("modes-grid");
     grid.innerHTML = "";
-    ["F1", "F2", "F3", "F4", "F5"].forEach(key => {
+    SUB_MODES.forEach(key => {
       const info = MODE_INFO[key];
       const audibleHz = info.theory * 64;
       const card = document.createElement("div");
@@ -824,16 +984,17 @@
   loadData();
   setInterval(loadData, 5 * 60 * 1000);
 
-  // ============ 日本時刻ルーラー ============
-  // トムスクのグラフ画像の下に JST 目盛りを重ねる。
+  // ============ 日本時刻オーバーレイ ============
+  // 画像内のトムスク時刻目盛り (下端) を黒で覆い、同じ位置に JST を直接描く。
+  // 日付と ▲今 は画像の下に大きめのフォントで出す。
   // 画像の時刻軸はトムスク地方時 (UTC+7) = 日本 (UTC+9) の −2時間。
-  // 画像レイアウト実測値: プロット領域の x 範囲 (3日分 = 72時間)
+  // レイアウト実測値: プロット x 範囲 (3日=72時間) と、時刻ラベル帯の縦位置
   const RULER_METRICS = {
-    line: { w: 1006, x0: 71, x1: 935 },   // srf / sra / srq 共通
-    shm:  { w: 1540, x0: 61, x1: 1503 }   // スペクトログラム
+    line: { w: 1006, h: 340, x0: 71, x1: 935, coverTop: 311 },  // srf / sra / srq 共通
+    shm:  { w: 1540, h: 460, x0: 61, x1: 1503, coverTop: 440 }  // スペクトログラム
   };
 
-  function buildJstRulers() {
+  function buildJstOverlays() {
     const now = new Date();
     // グラフ左端 = トムスクの一昨日 00:00 (UTC epoch で)
     const tomskNow = new Date(now.getTime() + 7 * 3600e3);
@@ -843,55 +1004,63 @@
 
     document.querySelectorAll(".jst-graph").forEach(wrap => {
       const m = RULER_METRICS[wrap.dataset.metrics];
-      const ruler = wrap.querySelector(".jst-ruler");
-      if (!m || !ruler) return;
-      ruler.innerHTML = "";
+      const cover = wrap.querySelector(".jst-cover");
+      const below = wrap.querySelector(".jst-below");
+      const img = wrap.querySelector("img");
+      if (!m || !cover || !below) return;
       const pos = g => (m.x0 + g / 72 * (m.x1 - m.x0)) / m.w * 100;
 
-      const tag = document.createElement("div");
-      tag.className = "jst-tag";
-      tag.textContent = "JST →";
-      ruler.appendChild(tag);
+      // 黒カバー: 画像内ラベル帯の高さに合わせる
+      cover.style.height = ((m.h - m.coverTop) / m.h * 100) + "%";
+      // フォントは表示幅に応じてスケール
+      const dispW = img.clientWidth || 700;
+      const fs = Math.max(8.5, Math.min(14, dispW / 55));
+      cover.style.fontSize = fs + "px";
+      cover.innerHTML = "";
+      below.innerHTML = "";
 
-      for (let g = 0; g <= 72; g += 2) {
+      const tag = document.createElement("div");
+      tag.className = "jc-tag";
+      tag.textContent = "JST";
+      cover.appendChild(tag);
+
+      const stepH = dispW < 500 ? 6 : 3;   // スマホは6時間ごと、PCは3時間ごと
+      for (let g = 0; g <= 72; g += 1) {
         const jst = new Date(day1Utc + g * 3600e3 + 9 * 3600e3);
         const h = jst.getUTCHours();
-        if (g === 0) {
-          // 左端に開始日の日付
-          const d0 = document.createElement("div");
-          d0.className = "jst-date";
-          d0.style.left = pos(0) + "%";
-          d0.textContent = (jst.getUTCMonth() + 1) + "/" + jst.getUTCDate();
-          ruler.appendChild(d0);
+        if (g === 0 || h === 0) {
+          // 日付は画像の下に大きく
+          const d = document.createElement("div");
+          d.className = "jb-date";
+          d.style.left = pos(g) + "%";
+          d.textContent = (jst.getUTCMonth() + 1) + "/" + jst.getUTCDate() +
+            "(" + "日月火水木金土"[jst.getUTCDay()] + ")";
+          below.appendChild(d);
+          if (g === 0) continue;
         }
-        if (h % 6 !== 0) continue;
+        if (h % stepH !== 0) continue;
         const el = document.createElement("div");
-        el.className = "jst-tick";
+        el.className = "jc-hour";
         el.style.left = pos(g) + "%";
         el.textContent = h;
-        ruler.appendChild(el);
-        if (h === 0) {
-          const d = document.createElement("div");
-          d.className = "jst-date";
-          d.style.left = pos(g) + "%";
-          d.textContent = (jst.getUTCMonth() + 1) + "/" + jst.getUTCDate();
-          ruler.appendChild(d);
-        }
+        cover.appendChild(el);
       }
-      // 「今」マーカー
+      // 「今」マーカー (画像の下・大きめ)
       const gNow = (now.getTime() - day1Utc) / 3600e3;
       if (gNow >= 0 && gNow <= 72) {
         const nowEl = document.createElement("div");
-        nowEl.className = "jst-now";
+        nowEl.className = "jb-now";
         nowEl.style.left = pos(gNow) + "%";
         nowEl.textContent = "▲今";
-        ruler.appendChild(nowEl);
+        below.appendChild(nowEl);
       }
     });
   }
 
-  buildJstRulers();
-  setInterval(buildJstRulers, 5 * 60 * 1000);
+  buildJstOverlays();
+  setInterval(buildJstOverlays, 5 * 60 * 1000);
+  window.addEventListener("resize", () => buildJstOverlays());
+  window.addEventListener("load", () => buildJstOverlays());
 </script>
 
 </body>
