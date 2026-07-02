@@ -778,6 +778,48 @@
     color: var(--text-muted);
     font-family: "JetBrains Mono", monospace;
   }
+  .avg-dash {
+    color: #d9ad4b; /* グラフ内の平均破線と同じ金茶色 */
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-right: 0.15rem;
+  }
+  /* 最初のモードブロックは summary の境界線から間を空ける (ピルと線の重なり防止) */
+  details.fold > .mode-block:first-of-type { margin-top: 1rem; }
+  /* 周波数の説明: 読みたい人だけ開く小さな折りたたみ */
+  .subfold {
+    margin: 0.5rem 0.9rem 0.9rem;
+    border: 1px solid rgba(50, 70, 120, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.6);
+  }
+  .subfold > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.7rem 1rem;
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .subfold > summary::-webkit-details-marker { display: none; }
+  .subfold > summary::after {
+    content: "＋";
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .subfold[open] > summary::after { content: "−"; }
+  .subfold p {
+    padding: 0 1rem 0.9rem;
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.88rem;
+    line-height: 1.9;
+    color: var(--text-muted);
+  }
   .mode-graph { width: 100%; height: auto; display: block; padding: 0; }
   .freq-note {
     padding: 0.6rem 0.9rem 0.2rem;
@@ -960,7 +1002,7 @@
     <div class="mode-head">
       <span class="mh-name">① 第一次モード</span>
       <span class="mh-cur m1" id="mh-cur-F1">—.——Hz</span>
-      <span class="mh-meta">基準値 7.83 ・ 3日間平均 <span id="mh-avg-F1">—</span></span>
+      <span class="mh-meta">基準値 7.83 ・ <span class="avg-dash">– – –</span> 3日間平均 <span id="mh-avg-F1">—</span></span>
     </div>
     <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f1.png" alt="第一次モード">
   </div>
@@ -969,7 +1011,7 @@
     <div class="mode-head">
       <span class="mh-name">② 第二次モード</span>
       <span class="mh-cur m2" id="mh-cur-F2">—.——Hz</span>
-      <span class="mh-meta">基準値 14.1 ・ 3日間平均 <span id="mh-avg-F2">—</span></span>
+      <span class="mh-meta">基準値 14.1 ・ <span class="avg-dash">– – –</span> 3日間平均 <span id="mh-avg-F2">—</span></span>
     </div>
     <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f2.png" alt="第二次モード">
   </div>
@@ -978,7 +1020,7 @@
     <div class="mode-head">
       <span class="mh-name">③ 第三次モード</span>
       <span class="mh-cur m3" id="mh-cur-F3">—.——Hz</span>
-      <span class="mh-meta">基準値 20.3 ・ 3日間平均 <span id="mh-avg-F3">—</span></span>
+      <span class="mh-meta">基準値 20.3 ・ <span class="avg-dash">– – –</span> 3日間平均 <span id="mh-avg-F3">—</span></span>
     </div>
     <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f3.png" alt="第三次モード">
   </div>
@@ -987,15 +1029,15 @@
     <div class="mode-head">
       <span class="mh-name">④ 第四次モード</span>
       <span class="mh-cur m4" id="mh-cur-F4">—.——Hz</span>
-      <span class="mh-meta">基準値 26.4 ・ 3日間平均 <span id="mh-avg-F4">—</span></span>
+      <span class="mh-meta">基準値 26.4 ・ <span class="avg-dash">– – –</span> 3日間平均 <span id="mh-avg-F4">—</span></span>
     </div>
     <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f4.png" alt="第四次モード">
   </div>
 
-  <div class="freq-note">
-    <h4>周波数の説明</h4>
+  <details class="subfold">
+    <summary>周波数の説明</summary>
     <p>雷などのエネルギーを基に、地球上には無数の電磁波が飛び交っています。その中で、地球を一周して自己共振により強め合う事になった特定の周波数だけが強く残ります。倍音により第1次モードから第7次モードまで観測されています。周波数の上下は主に太陽活動による電離層の高度の上下や、雷の活動の増減です。シューマン共振電磁波は地球固有の「音」と表現されますが、電磁波です。MASTER MIND MEMBERS ではその電磁波を特殊な技術で可聴域に変換し、耳で聴く『シューマン音』を提供しています。</p>
-  </div>
+  </details>
 
   <p class="src-line">出典データ: トムスク国立大学の公開データを基にグラフを作成。詳細は大学のHPをご確認ください
   ⇒ <a href="https://sosrff.tsu.ru/" target="_blank" rel="noopener">sosrff.tsu.ru</a></p>
