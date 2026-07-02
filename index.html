@@ -52,7 +52,13 @@
     background-size: 60px 60px;
     pointer-events: none; z-index: 0;
   }
-  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0.6rem 1.5rem 6rem; }
+  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0.6rem 1.5rem 6rem;
+    display: flex; flex-direction: column; }
+  .wrap > * { width: 100%; }
+  /* 表示順: グラフと出典 (source順のまま=0) → 音とシューマン電磁波 → 磁場の回転 → footer */
+  #fold-sound { order: 1; }
+  #fold-mag { order: 2; }
+  footer { order: 3; }
   header { text-align: center; padding: 0.4rem 0 0.9rem; }
   .mmm-logo {
     display: flex;
@@ -397,16 +403,15 @@
     position: absolute; top: 0.1rem; transform: translateX(-50%);
     font-size: 0.85rem; color: #c84470; font-weight: 700; white-space: nowrap;
   }
-  /* ★ 地球儀 (トップ): 枠なし。黒い宇宙が白いページに滲んで溶け込む */
+  /* ★ 地球儀 (トップ): 枠なし。黒い宇宙が楕円ににじんで白いページへ拡がる */
   .globe-wrap {
-    max-width: min(96vw, 660px);
-    margin: 0 auto 0;
+    width: 100%;
+    margin: 0 auto;
     line-height: 0;
   }
   .globe-wrap iframe {
     width: 100%;
-    aspect-ratio: 1 / 1;
-    height: auto;
+    height: clamp(360px, 94vw, 560px);
     border: none;
     display: block;
     background: transparent;
@@ -467,7 +472,38 @@
     height: auto;
     margin-top: 0.9rem;
     border-radius: 10px;
-    background: rgba(44, 46, 58, 0.92);
+    background: rgba(0, 0, 0, 0.35); /* 鼠色 (折りたたみ内の初代と同じ) */
+  }
+  /* 統合セクション内の小見出し */
+  .fold-subh {
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    letter-spacing: 0.08em;
+    margin-top: 1.3rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgba(163, 124, 34, 0.25);
+  }
+  .src-line {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    margin-top: 0.9rem;
+  }
+  /* ★ スマホ: 左右余白ゼロでグラフを幅いっぱいに */
+  @media (max-width: 700px) {
+    .wrap { padding-left: 0; padding-right: 0; }
+    details.fold { border-radius: 0; border-left: none; border-right: none; margin-bottom: 0.7rem; }
+    details.fold > :not(summary) { margin-left: 0; margin-right: 0; }
+    .graph-card { border-radius: 0; }
+    .graph-description { padding: 1.1rem 0.9rem; }
+    .graph-image-wrap { padding: 0.5rem 0.2rem; }
+    .fold-subh, .src-line { margin-left: 0.9rem; margin-right: 0.9rem; }
+    .phi-wrap, .f1-hero, .manual-panel { margin-left: 0.5rem; margin-right: 0.5rem; }
+    .globe-f1 { padding-left: 0; padding-right: 0; }
+    #f1-spark-top { border-radius: 0; max-width: none; }
+    header { padding-bottom: 0.4rem; }
   }
   /* 黄金比の音 (シンギング・アース) — おりんの楽器 */
   .phi-wrap { padding: 0.4rem 0.4rem 0.8rem; }
@@ -709,25 +745,10 @@
 
   <div class="error-banner" id="error-banner">データ取得中にエラーが発生しました。</div>
 
-  <details class="fold">
-    <summary>♪ シンギングアース（黄金比）</summary>
-    <div class="phi-wrap">
-      <p class="phi-explain">
-        黄金比 φ = <b>1.61803399</b>（小数点第8位）。いま観測されているシューマン共振の周波数に
-        φ を何度もかけて（φⁿ 倍）、人の耳に聞こえる高さまで持ち上げます。
-        オクターブ（2倍）ではなく黄金比で持ち上げた音どうしは、どこまでも割り切れない
-        らせんのような響きになります。触れると音が重なり、離すと余韻を残して消えます。
-      </p>
-      <div class="phi-stage">
-        <div class="phi-pads" id="phi-pads"></div>
-        <div class="phi-base"></div>
-      </div>
-      <p class="phi-note">鈴に触れると鳴り、もう一度触れると余韻を残して鎮まります ・ 鳴らしたまま重ねられます<br>※ スマホは消音モードだと鳴らないことがあります</p>
-    </div>
-  </details>
+  <details class="fold" id="fold-sound">
+    <summary>音とシューマン電磁波</summary>
 
-  <details class="fold">
-    <summary>音で聴くシューマン共振</summary>
+  <div class="fold-subh">音で聴くシューマン共振</div>
 
   <!-- ★ F1 ヒーロー: このサイトの主役 = 第一次モード -->
   <section class="f1-hero">
@@ -768,15 +789,26 @@
     </div>
   </div>
 
+  <div class="fold-subh">♪ シンギングアース（黄金比）</div>
+
+  <div class="phi-wrap">
+    <p class="phi-explain">
+      黄金比 φ = <b>1.61803399</b>。いまのシューマン共振の周波数に φ を何度もかけて、
+      耳に聞こえる高さまで持ち上げた鈴の音です。それぞれの鈴の φ の回数は下の −＋ で変えられます。
+    </p>
+    <div class="phi-stage">
+      <div class="phi-pads" id="phi-pads"></div>
+      <div class="phi-base"></div>
+    </div>
+    <p class="phi-note">鈴に触れると鳴り、もう一度触れると鎮まります ・ 重ねて鳴らせます<br>※ スマホは消音モードだと鳴らないことがあります</p>
+  </div>
+
   </details>
 
-  <details class="fold">
-    <summary>グラフと出典ソース</summary>
+  <details class="fold" id="fold-graphs">
+    <summary>グラフと出典</summary>
 
-  <h2 class="section-title">
-    <span>4つの窓から見る地球の磁気圏</span>
-    <span class="section-sub">TOMSK / RUSSIA</span>
-  </h2>
+  <p class="src-line">トムスク大学による観測値を使用しています。数値は周波数グラフの自動読み取りです。</p>
 
   <div class="graph-section">
 
@@ -797,12 +829,8 @@
       <div class="graph-description">
         <h3>① Spectrogram</h3>
         <div class="graph-sub">周波数 × 時間 × 強度</div>
-        <p>横軸は時刻、縦軸は周波数（Hz）、色の明るさがパワーを表します。横に走る4本の明るい帯が F1〜F4 のモード。帯の太さや鋭さから、各モードの安定度が読めます。</p>
-        <p>縦方向に走る明るい線は、Q-burst と呼ばれる巨大雷放電の痕跡。全帯域で一斉にパワーが跳ね上がる瞬間です。</p>
-        <div class="mmm-note">
-          <h4>MMM との関わり</h4>
-          <p>MMM の活動時間帯にスペクトログラムで異常パターンが現れるかを追うことで、集合的な電磁場への影響を視覚的に検証できます。</p>
-        </div>
+        <p>横に走る4本の明るい帯がシューマン共振 F1〜F4。帯がくっきり太い時間帯ほど、共振が強く出ています。</p>
+        <p>ときどき縦に走る明るい線は Q-burst — 地球のどこかで起きた巨大な雷の一撃が、全帯域を一瞬で揺らした痕跡です。</p>
       </div>
     </article>
 
@@ -822,13 +850,9 @@
       </div>
       <div class="graph-description">
         <h3>② Frequency</h3>
-        <div class="graph-sub">各モードの中心周波数の推移（メイン）</div>
-        <p>理論値は F1: 7.83Hz, F2: 14.1Hz, F3: 20.3Hz, F4: 26.4Hz。周波数の変動は主に電離層の形状・高さに依存します。空洞のサイズが変わると共振周波数が動く。<em>※ F5 (33.8Hz) はこのグラフに含まれないため、当サイトでは扱いません。</em></p>
-        <p>F1 はQ値が低く変動幅が大きい、F3 はQ値が高く細い線で安定——という個性が現れます。<strong>上部の数値はこのグラフから自動読み取りしています。</strong></p>
-        <div class="mmm-note">
-          <h4>MMM との関わり</h4>
-          <p>シューマン音© の目標は 7.83Hz → 8.02Hz への引き上げ。F1 の長期変動に、MMM の集合的意図の痕跡が残るかを追跡しています。</p>
-        </div>
+        <div class="graph-sub">各モードの中心周波数の推移</div>
+        <p><strong>トップの数値はこのグラフから読み取っています。</strong>基準は F1: 7.83 / F2: 14.1 / F3: 20.3 / F4: 26.4 Hz。</p>
+        <p>周波数を動かすのは主に電離層の高さ。太陽の活動で電離層がふくらんだり縮んだりすると、「地球という楽器」のサイズが変わって音程が動きます。</p>
       </div>
     </article>
 
@@ -848,13 +872,9 @@
       </div>
       <div class="graph-description">
         <h3>③ Amplitude</h3>
-        <div class="graph-sub">共振エネルギーの強さ（pT）</div>
-        <p>振幅は全球の雷活動の強度そのもの。UTC 8時（東南アジア午後）、15時（アフリカ午後）、21時（南米午後）に、それぞれ振幅のピークが現れます。3大雷活動中心のリズムが振幅に刻まれています。</p>
-        <p>単位は <em>ピコテスラ</em>（pT）。地球磁場の約10億分の1という途方もない微弱さ。</p>
-        <div class="mmm-note">
-          <h4>MMM との関わり</h4>
-          <p>集合的な意図が電磁エネルギー注入として作用するなら、周波数より振幅に先に出る可能性があります。MMM 活動時間帯の振幅スパイクが注目ポイント。</p>
-        </div>
+        <div class="graph-sub">共振の強さ（pT ピコテスラ）</div>
+        <p>世界中の雷の総量がそのまま出るグラフ。東南アジア（日本の夕方）→ アフリカ（深夜）→ 南米（明け方）と、3つの大雷帯が順にピークを作る「地球の1日のリズム」が刻まれます。</p>
+        <p>単位のピコテスラは地球磁場の約10億分の1 — トップの地球儀で光っている雷たちの、合唱の音量です。</p>
       </div>
     </article>
 
@@ -873,27 +893,17 @@
       </div>
       <div class="graph-description">
         <h3>④ Quality Factor</h3>
-        <div class="graph-sub">共振の鋭さ・持続性</div>
-        <p>Q値は「共振がどれだけ鋭いか」の指標。地球のシューマン共振の Q 値は F1 で 4〜6 と非常に低く、雷が止まれば数秒で減衰する「漏れだらけの共振器」です。</p>
-        <p>Q 値が低いということは、外部からの駆動力に対して共振周波数が<em>動きやすい</em>ということ。太陽フレアや地磁気嵐で Q 値が跳ね上がり、電離層の状態を映す鏡になります。</p>
-        <div class="mmm-note">
-          <h4>MMM との関わり</h4>
-          <p>Q 値は電離層の状態に敏感。MMM の活動で電離層に何らかの変化が起きるなら、周波数そのものより Q 値の変動パターンに先行して現れる可能性があります。</p>
-        </div>
+        <div class="graph-sub">共振の鋭さ</div>
+        <p>Q値は共振の「鋭さ」。シューマン共振は 4〜6 とかなり低く、雷が止めばすぐ減衰する繊細な共鳴です。低いからこそ、外からの影響で音程が動きやすい。</p>
+        <p>太陽フレアや地磁気嵐で跳ね上がるので、電離層のコンディションを映す鏡としても読めます。</p>
       </div>
     </article>
 
   </div>
 
-  <div class="disclaimer">
-    <strong>※ 数値はトムスク大学の周波数グラフをピクセル解析で自動読み取りしたものです。</strong>
-    観測所側のデータ欠損時は信頼度（緑・黄・赤のバー）が下がります。
-    データ元: トムスク国立大学 宇宙物理観測所 (sosrff.tsu.ru / ミラー sos70.ru)
-  </div>
-
   </details>
 
-  <details class="fold">
+  <details class="fold" id="fold-mag">
     <summary>磁場の回転</summary>
 
     <div class="polarization-banner" id="polarization-banner">
