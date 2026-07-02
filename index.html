@@ -354,10 +354,7 @@
   .graph-card {
     background: var(--bg-card); backdrop-filter: blur(10px);
     border: 1px solid var(--border); border-radius: 16px;
-    overflow: hidden; display: grid; grid-template-columns: 1fr;
-  }
-  @media (min-width: 768px) {
-    .graph-card { grid-template-columns: 1.3fr 1fr; }
+    overflow: hidden;
   }
   .graph-image-wrap {
     position: relative; background: #000; padding: 0.4rem;
@@ -550,7 +547,8 @@
     font-size: 0.72rem;
     color: var(--text-muted);
     letter-spacing: 0.06em;
-    margin-top: 0.9rem;
+    margin: 0.2rem 0 1rem;
+    text-align: center;
   }
   /* ★ スマホ: 左右余白ゼロでグラフを幅いっぱいに */
   @media (max-width: 700px) {
@@ -747,16 +745,17 @@
   details.fold > :not(summary) { margin-left: 0.8rem; margin-right: 0.8rem; }
   details.fold > section, details.fold > .graph-section, details.fold > h2 { margin-top: 1rem; }
   details.fold > :last-child:not(summary) { margin-bottom: 1rem; }
-  .graph-description { padding: 2rem; }
-  .graph-description h3 {
+  .graph-description { padding: 0.9rem 1.2rem 0.6rem; }
+  .graph-head { padding: 0.9rem 1.2rem 0.5rem; }
+  .graph-head h3 {
     font-family: "Cormorant Garamond", serif;
-    font-size: 1.5rem; font-weight: 500;
-    color: var(--accent-aurora); margin-bottom: 0.5rem;
+    font-size: 1.4rem; font-weight: 500;
+    color: var(--accent-aurora); margin-bottom: 0.15rem;
   }
-  .graph-description .graph-sub {
+  .graph-head .graph-sub {
     font-family: "JetBrains Mono", monospace;
-    font-size: 0.7rem; color: var(--text-dim);
-    letter-spacing: 0.2em; margin-bottom: 1.5rem;
+    font-size: 0.68rem; color: var(--text-dim);
+    letter-spacing: 0.2em;
   }
   .graph-description p {
     font-family: "Noto Serif JP", serif;
@@ -908,11 +907,13 @@
   <details class="fold" id="fold-graphs">
     <summary>グラフと出典</summary>
 
-  <p class="src-line">トムスク大学による観測値を使用しています。数値は周波数グラフの自動読み取りです。</p>
-
   <div class="graph-section">
 
     <article class="graph-card">
+      <div class="graph-head">
+        <h3>① Spectrogram</h3>
+        <div class="graph-sub">周波数 × 時間 × 強度</div>
+      </div>
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="shm">
           <div class="jst-imgbox">
@@ -923,14 +924,16 @@
         </div>
       </div>
       <div class="graph-description">
-        <h3>① Spectrogram</h3>
-        <div class="graph-sub">周波数 × 時間 × 強度</div>
         <p>横に走る4本の明るい帯がシューマン共振 F1〜F4。帯がくっきり太い時間帯ほど、共振が強く出ています。</p>
         <p>ときどき縦に走る明るい線は Q-burst — 地球のどこかで起きた巨大な雷の一撃が、全帯域を一瞬で揺らした痕跡です。</p>
       </div>
     </article>
 
     <article class="graph-card">
+      <div class="graph-head">
+        <h3>② Frequency</h3>
+        <div class="graph-sub">各モードの中心周波数の推移</div>
+      </div>
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
           <div class="jst-imgbox">
@@ -941,14 +944,16 @@
         </div>
       </div>
       <div class="graph-description">
-        <h3>② Frequency</h3>
-        <div class="graph-sub">各モードの中心周波数の推移</div>
         <p><strong>トップの数値はこのグラフから読み取っています。</strong>基準は F1: 7.83 / F2: 14.1 / F3: 20.3 / F4: 26.4 Hz。</p>
         <p>周波数を動かすのは主に電離層の高さ。太陽の活動で電離層がふくらんだり縮んだりすると、「地球という楽器」のサイズが変わって音程が動きます。</p>
       </div>
     </article>
 
     <article class="graph-card">
+      <div class="graph-head">
+        <h3>③ Amplitude</h3>
+        <div class="graph-sub">共振の強さ（pT ピコテスラ）</div>
+      </div>
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
           <div class="jst-imgbox">
@@ -959,14 +964,16 @@
         </div>
       </div>
       <div class="graph-description">
-        <h3>③ Amplitude</h3>
-        <div class="graph-sub">共振の強さ（pT ピコテスラ）</div>
         <p>世界中の雷の総量がそのまま出るグラフ。東南アジア（日本の夕方）→ アフリカ（深夜）→ 南米（明け方）と、3つの大雷帯が順にピークを作る「地球の1日のリズム」が刻まれます。</p>
         <p>単位のピコテスラは地球磁場の約10億分の1 — トップの地球儀で光っている雷たちの、合唱の音量です。</p>
       </div>
     </article>
 
     <article class="graph-card">
+      <div class="graph-head">
+        <h3>④ Quality Factor</h3>
+        <div class="graph-sub">共振の鋭さ</div>
+      </div>
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
           <div class="jst-imgbox">
@@ -977,14 +984,14 @@
         </div>
       </div>
       <div class="graph-description">
-        <h3>④ Quality Factor</h3>
-        <div class="graph-sub">共振の鋭さ</div>
         <p>Q値は共振の「鋭さ」。シューマン共振は 4〜6 とかなり低く、雷が止めばすぐ減衰する繊細な共鳴です。低いからこそ、外からの影響で音程が動きやすい。</p>
         <p>太陽フレアや地磁気嵐で跳ね上がるので、電離層のコンディションを映す鏡としても読めます。</p>
       </div>
     </article>
 
   </div>
+
+  <p class="src-line">※ トムスク大学の観測グラフ画像をピクセル解析して読み取った値を表示しています</p>
 
   </details>
 
