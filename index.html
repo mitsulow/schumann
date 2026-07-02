@@ -600,43 +600,90 @@
     min-width: 2.4em;
     text-align: center;
   }
-  /* 音の球たちが浮かぶ夜空パネル */
-  .phi-sky {
-    position: relative;
-    height: clamp(300px, 62vw, 430px);
+  /* シンギングリンの祭壇: 4色 × 3列 = 12鉢 */
+  .phi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.9rem 0.9rem;
+    padding: 1rem 0.7rem 1.1rem;
     margin-top: 0.4rem;
     border-radius: 16px;
     background:
-      radial-gradient(ellipse at 30% 20%, rgba(60, 80, 160, 0.25), transparent 55%),
-      radial-gradient(ellipse at 75% 80%, rgba(120, 60, 160, 0.18), transparent 55%),
+      radial-gradient(ellipse at 30% 15%, rgba(60, 80, 160, 0.22), transparent 55%),
+      radial-gradient(ellipse at 75% 85%, rgba(120, 60, 160, 0.16), transparent 55%),
       linear-gradient(160deg, #14161f, #0c0e16);
-    overflow: hidden;
   }
-  .phi-ball {
-    position: absolute;
-    border-radius: 50%;
+  .rin-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .rin-btn {
+    background: none;
     border: none;
     padding: 0;
     cursor: pointer;
-    transform: translate(-50%, -50%);
-    transition: transform 0.16s ease-out;
-    user-select: none;
+    width: 100%;
+    max-width: 160px;
+    position: relative;
+    transition: transform 0.12s;
     -webkit-tap-highlight-color: transparent;
-    animation: ballBob ease-in-out infinite alternate;
   }
-  @keyframes ballBob {
-    from { margin-top: -7px; margin-left: -4px; }
-    to { margin-top: 7px; margin-left: 4px; }
+  .rin-btn.m1 { --glow: rgba(0, 255, 200, 0.9); }
+  .rin-btn.m2 { --glow: rgba(255, 214, 10, 0.9); }
+  .rin-btn.m3 { --glow: rgba(200, 120, 255, 0.9); }
+  .rin-btn.m4 { --glow: rgba(255, 60, 140, 0.9); }
+  .rin-btn img {
+    width: 100%;
+    display: block;
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+    transition: filter 0.3s;
+    pointer-events: none;
   }
-  .phi-ball.m1 { background: radial-gradient(circle at 33% 30%, #eafffa, #00ffc8 45%, #007a5e); box-shadow: 0 0 18px rgba(0, 255, 200, 0.45); }
-  .phi-ball.m2 { background: radial-gradient(circle at 33% 30%, #fff8dc, #ffd60a 45%, #8a7000); box-shadow: 0 0 18px rgba(255, 214, 10, 0.45); }
-  .phi-ball.m3 { background: radial-gradient(circle at 33% 30%, #f4e8ff, #c878ff 45%, #5e2a8a); box-shadow: 0 0 18px rgba(200, 120, 255, 0.45); }
-  .phi-ball.m4 { background: radial-gradient(circle at 33% 30%, #ffe0ec, #ff3c8c 45%, #7e1040); box-shadow: 0 0 18px rgba(255, 60, 140, 0.45); }
-  .phi-ball.hit { transform: translate(-50%, -50%) scale(1.28); }
-  .phi-ball.hit.m1 { box-shadow: 0 0 42px rgba(0, 255, 200, 0.95); }
-  .phi-ball.hit.m2 { box-shadow: 0 0 42px rgba(255, 214, 10, 0.95); }
-  .phi-ball.hit.m3 { box-shadow: 0 0 42px rgba(200, 120, 255, 0.95); }
-  .phi-ball.hit.m4 { box-shadow: 0 0 42px rgba(255, 60, 140, 0.95); }
+  .rin-btn:active { transform: scale(0.94); }
+  .rin-btn.on img, .rin-btn.hit img {
+    filter: drop-shadow(0 0 22px var(--glow));
+  }
+  /* 鳴っている間、波紋が広がり続ける */
+  .rin-btn.on::before, .rin-btn.on::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 92%; height: 78%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid var(--glow);
+    animation: rinWave 2.6s ease-out infinite;
+    pointer-events: none;
+  }
+  .rin-btn.on::after { animation-delay: 1.3s; }
+  @keyframes rinWave {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(1.55); opacity: 0; }
+  }
+  .rin-k { display: flex; align-items: center; gap: 0.3rem; }
+  .rin-k button {
+    width: 1.5rem; height: 1.5rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #dde;
+    font-size: 0.85rem;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .rin-k button:active { background: rgba(255, 255, 255, 0.3); }
+  .rin-k span {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #cfd3e0;
+    min-width: 2.2em;
+    text-align: center;
+  }
   .phi-note { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.9rem; }
   .phi-auto-row { text-align: center; margin: 0.2rem 0 0.4rem; }
   .phi-auto {
@@ -935,14 +982,14 @@
 
   <div class="phi-wrap">
     <p class="phi-explain">
-      いまのシューマン共振 4音 × 黄金比 φ = <b>1.61803399</b> のべき乗でできた音の球たち。
-      色はグラフの4モードに対応しています。触れると鳴ります。
+      いまのシューマン共振 4音 × 黄金比 φ = <b>1.61803399</b> のべき乗。
+      色はグラフの4モードに対応。リンに触れると鳴り続け、重ねるとハーモニーになります。
     </p>
     <div class="phi-auto-row">
       <button id="phi-auto" class="phi-auto" type="button">♪ AI メロディ</button>
     </div>
-    <div class="phi-sky" id="phi-sky"></div>
-    <p class="phi-note">大きな球ほど低い音 ・ 重ねて鳴らせます ※ スマホは消音モードだと鳴らないことがあります</p>
+    <div class="phi-grid" id="phi-grid"></div>
+    <p class="phi-note">もう一度触れると鎮まります ・ 下の φⁿ で音の高さを変えられます ※ スマホは消音モードだと鳴らないことがあります</p>
   </div>
 
   </details>
@@ -1368,55 +1415,66 @@
     return m && typeof m.hz === "number" ? m.hz : MODE_INFO[key].theory;
   }
 
-  // ===== 音の球たち: 4モード × φ^k (可聴域) を黄金角スパイラルで夜空に浮かべる =====
+  // ===== シンギングリンの祭壇: 4色 × 3列 = 12鉢 =====
+  // 触れると鳴り続け (サステイン)、重ねるとハーモニー。φ のべき乗は各リンで変更可
   const phiBalls = [];
   function buildPhiSky() {
-    const sky = document.getElementById("phi-sky");
-    if (!sky || phiBalls.length) return;
-    const notes = [];
-    Object.keys(PHI_THEORY).forEach(key => {
-      for (let k = 3; k <= 11; k++) {
-        const f = PHI_THEORY[key] * Math.pow(PHI, k);
-        if (f >= 140 && f <= 1250) notes.push({ key, k, f });
-      }
-    });
-    notes.sort((a, b) => a.f - b.f);
-    const GA = Math.PI * (3 - Math.sqrt(5)); // 黄金角 137.5°
-    notes.forEach((n, i) => {
-      const el = document.createElement("button");
-      el.type = "button";
-      el.className = "phi-ball " + PHI_MODE_CLS[n.key];
-      // 低い音ほど大きい球
-      const t = Math.log(n.f / 140) / Math.log(1250 / 140);
-      const size = Math.round(86 - 54 * t);
-      el.style.width = el.style.height = size + "px";
-      // 黄金角スパイラル配置 (ひまわりの種と同じ並び)
-      const r = Math.sqrt((i + 0.6) / notes.length) * 40;
-      const ang = i * GA;
-      el.style.left = (50 + r * Math.cos(ang)).toFixed(1) + "%";
-      el.style.top = (50 + r * Math.sin(ang) * 0.9).toFixed(1) + "%";
-      // ぷかぷか (個体差のある揺れ)
-      const seed = ((i * 9301 + 49297) % 233280) / 233280;
-      el.style.animationDuration = (2.6 + seed * 2.8).toFixed(2) + "s";
-      el.style.animationDelay = (-seed * 4).toFixed(2) + "s";
-      const ball = { key: n.key, k: n.k, freq: n.f, el };
-      el.addEventListener("click", () => {
-        strike(ball.freq, 0.14, 2.6);
-        flashBall(ball);
+    const grid = document.getElementById("phi-grid");
+    if (!grid || phiBalls.length) return;
+    const DEFAULT_K = [7, 8, 9]; // 左列 φ⁷ / 中央 φ⁸ / 右列 φ⁹
+    ["F1", "F2", "F3", "F4"].forEach(key => {
+      DEFAULT_K.forEach(k0 => {
+        const cell = document.createElement("div");
+        cell.className = "rin-cell";
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "rin-btn " + PHI_MODE_CLS[key];
+        const img = document.createElement("img");
+        img.src = "bowl_" + PHI_MODE_CLS[key] + ".png";
+        img.alt = "";
+        img.draggable = false;
+        btn.appendChild(img);
+        const sel = document.createElement("div");
+        sel.className = "rin-k";
+        const minus = document.createElement("button");
+        minus.type = "button"; minus.textContent = "−";
+        const kval = document.createElement("span");
+        const plus = document.createElement("button");
+        plus.type = "button"; plus.textContent = "＋";
+        sel.appendChild(minus); sel.appendChild(kval); sel.appendChild(plus);
+        cell.appendChild(btn); cell.appendChild(sel);
+        grid.appendChild(cell);
+        const ball = { key, k: k0, freq: 440, el: btn, bowl: null };
+        ball.update = () => {
+          ball.freq = phiHzOf(key) * Math.pow(PHI, ball.k);
+          kval.textContent = "φ" + ball.k;
+          if (ball.bowl) retuneBowl(ball.bowl, ball.freq); // 鳴らしたまま滑らかに移調
+        };
+        ball.update();
+        btn.addEventListener("click", () => {
+          if (ball.bowl) {
+            stopBowl(ball.bowl); ball.bowl = null;
+            btn.classList.remove("on");
+          } else {
+            ball.bowl = startBowl(ball.freq);
+            btn.classList.add("on");
+          }
+        });
+        minus.addEventListener("click", () => { if (ball.k > 4) { ball.k--; ball.update(); } });
+        plus.addEventListener("click", () => { if (ball.k < 11) { ball.k++; ball.update(); } });
+        phiBalls.push(ball);
       });
-      sky.appendChild(el);
-      phiBalls.push(ball);
     });
   }
   function flashBall(b) {
     b.el.classList.add("hit");
-    setTimeout(() => b.el.classList.remove("hit"), 280);
+    setTimeout(() => b.el.classList.remove("hit"), 300);
   }
-  // 実測値の更新に合わせて全球を再チューニング (renderData から呼ばれる)
+  // 実測値の更新に合わせて全リンを再チューニング (renderData から呼ばれる)
   function buildPhiPads(modes) {
     if (modes) phiLastModes = modes;
     buildPhiSky();
-    phiBalls.forEach(b => { b.freq = phiHzOf(b.key) * Math.pow(PHI, b.k); });
+    phiBalls.forEach(b => { if (b.update) b.update(); });
   }
   buildPhiPads(null);
 
@@ -1428,7 +1486,7 @@
   let melodyIdx = -1;
 
   function melodyPool() {
-    return phiBalls;
+    return phiBalls.slice().sort((a, b) => a.freq - b.freq);
   }
 
   // 一打ちの鐘: 立ち上がり一瞬 → ゆっくり減衰する正弦波
