@@ -616,24 +616,97 @@
     min-width: 2.4em;
     text-align: center;
   }
-  /* シンギングリンの祭壇: 4色 × 3列 = 12鉢 */
+  /* 水晶リンの宇宙: 大きさも位置も有機的に散らばる12鉢 */
   .phi-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.9rem 0.9rem;
-    padding: 1rem 0.7rem 1.1rem;
+    position: relative;
+    height: clamp(440px, 100vw, 600px);
     margin-top: 0.4rem;
     border-radius: 16px;
+    overflow: hidden;
     background:
       radial-gradient(ellipse at 30% 15%, rgba(60, 80, 160, 0.22), transparent 55%),
       radial-gradient(ellipse at 75% 85%, rgba(120, 60, 160, 0.16), transparent 55%),
       linear-gradient(160deg, #14161f, #0c0e16);
   }
   .rin-cell {
+    position: absolute;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.15rem;
+    animation: cellBob ease-in-out infinite alternate;
+  }
+  @keyframes cellBob {
+    from { margin-top: -6px; }
+    to { margin-top: 6px; }
+  }
+  /* ===== 没入モード: 全画面が宇宙になる ===== */
+  #cosmos-bar { display: none; }
+  body.cosmos { overflow: hidden; }
+  body.cosmos .phi-grid {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    z-index: 2000;
+  }
+  body.cosmos .rin-k { display: none; }
+  body.cosmos #cosmos-bar {
+    display: flex;
+    position: absolute;
+    top: calc(0.8rem + env(safe-area-inset-top));
+    right: 0.9rem;
+    gap: 0.6rem;
+    z-index: 20;
+  }
+  #cosmos-bar button {
+    width: 2.7rem;
+    height: 2.7rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    color: #dde3f0;
+    font-size: 1.15rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* 星空とオーロラ (没入時のみふわっと出現) */
+  .phi-grid::before, .phi-grid::after {
+    content: "";
+    position: absolute;
+    inset: -60% -30%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.2s;
+  }
+  .phi-grid::before {
+    background-image:
+      radial-gradient(1.6px 1.6px at 13% 21%, rgba(255,255,255,0.9), transparent 60%),
+      radial-gradient(1.2px 1.2px at 31% 67%, rgba(255,255,255,0.7), transparent 60%),
+      radial-gradient(2px 2px at 52% 38%, rgba(200,220,255,0.85), transparent 60%),
+      radial-gradient(1.1px 1.1px at 68% 12%, rgba(255,255,255,0.6), transparent 60%),
+      radial-gradient(1.4px 1.4px at 84% 54%, rgba(255,240,220,0.75), transparent 60%),
+      radial-gradient(1px 1px at 22% 88%, rgba(255,255,255,0.55), transparent 60%),
+      radial-gradient(1.7px 1.7px at 92% 82%, rgba(210,230,255,0.8), transparent 60%),
+      radial-gradient(1px 1px at 45% 5%, rgba(255,255,255,0.5), transparent 60%),
+      radial-gradient(1.3px 1.3px at 6% 49%, rgba(255,255,255,0.65), transparent 60%),
+      radial-gradient(1px 1px at 74% 93%, rgba(255,255,255,0.5), transparent 60%);
+    background-size: 460px 460px;
+    background-repeat: repeat;
+    animation: starDrift 150s linear infinite;
+  }
+  .phi-grid::after {
+    background:
+      radial-gradient(ellipse 60% 40% at 72% 18%, rgba(100, 70, 200, 0.22), transparent 70%),
+      radial-gradient(ellipse 55% 38% at 22% 78%, rgba(0, 140, 150, 0.16), transparent 70%);
+  }
+  body.cosmos .phi-grid::before, body.cosmos .phi-grid::after { opacity: 1; }
+  @keyframes starDrift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-230px, -150px); }
   }
   .rin-btn {
     background: none;
@@ -641,10 +714,25 @@
     padding: 0;
     cursor: pointer;
     width: 100%;
-    max-width: 160px;
     position: relative;
     transition: transform 0.12s;
     -webkit-tap-highlight-color: transparent;
+  }
+  /* 雷の合いの手: 遠くの星の瞬き */
+  .star-flash {
+    position: absolute;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 20px 7px rgba(200, 222, 255, 0.85);
+    animation: starFlash 1.5s ease-out forwards;
+    pointer-events: none;
+    z-index: 5;
+  }
+  @keyframes starFlash {
+    0% { opacity: 0; transform: scale(0.4); }
+    12% { opacity: 1; transform: scale(1.5); }
+    100% { opacity: 0; transform: scale(0.8); }
   }
   .rin-btn.m1 { --glow: rgba(0, 255, 200, 0.9); }
   .rin-btn.m2 { --glow: rgba(255, 214, 10, 0.9); }
@@ -1001,10 +1089,11 @@
   <div class="phi-wrap">
     <p class="phi-explain">
       いまのシューマン共振 4音 × 黄金比 φ = <b>1.61803399</b> のべき乗。色はグラフの4モードに対応。
-      本物の水晶リンのように、<b>縁を指でくるくるなぞると音が育って、鳴りっぱなし</b>になります。
-      鳴っているリンに軽くタップすると鎮まります。
+      本物の水晶リンのように、<b>時計回りになぞると音が育ち、反時計回りで鎮まっていきます</b>。
+      育てて手を離すと鳴りっぱなし。軽くタップで一打 / 鳴っている鉢はタップで停止。
     </p>
     <div class="phi-auto-row">
+      <button id="phi-immersive" class="phi-auto" type="button">🌌 音で遊ぶ — 没入モード</button>
       <button id="phi-auto" class="phi-auto" type="button">♪ AI メロディ</button>
     </div>
     <div class="phi-grid" id="phi-grid"></div>
@@ -1407,7 +1496,7 @@
     const ctx = getAudioCtx();
     const o = ctx.createOscillator(); o.type = "sine"; o.frequency.value = freq;
     const g = ctx.createGain(); g.gain.value = 0;
-    o.connect(g); g.connect(ctx.destination); o.start();
+    o.connect(g); g.connect(ctx.destination); g.connect(getReverb()); o.start();
     g.gain.setValueAtTime(0.0001, ctx.currentTime);
     g.gain.linearRampToValueAtTime(0.14, ctx.currentTime + 0.35);
     return { osc: o, master: g };
@@ -1439,12 +1528,30 @@
   // 鳴っているリンを軽くタップすると鎮まる。静かなリンをタップすると一打だけ響く
   const phiBalls = [];
 
+  // 空間の残響 (薄いリバーブ)。鳴らした音の気持ちよさが段違いになる
+  let reverbNode = null;
+  function getReverb() {
+    if (reverbNode) return reverbNode;
+    const ctx = getAudioCtx();
+    const len = Math.floor(ctx.sampleRate * 2.8);
+    const ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = ir.getChannelData(ch);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6);
+    }
+    reverbNode = ctx.createConvolver();
+    reverbNode.buffer = ir;
+    const wet = ctx.createGain(); wet.gain.value = 0.35;
+    reverbNode.connect(wet); wet.connect(ctx.destination);
+    return reverbNode;
+  }
+
   function ensureNode(ball) {
     if (ball.node) return;
     const ctx = getAudioCtx();
     const o = ctx.createOscillator(); o.type = "sine"; o.frequency.value = ball.freq;
     const g = ctx.createGain(); g.gain.value = 0.0001;
-    o.connect(g); g.connect(ctx.destination); o.start();
+    o.connect(g); g.connect(ctx.destination); g.connect(getReverb()); o.start();
     ball.node = { osc: o, master: g };
     ball.gain = 0;
   }
@@ -1480,14 +1587,17 @@
     btn.addEventListener("pointermove", e => {
       if (!ball._active) return;
       const a = Math.atan2(e.clientY - ball._cy, e.clientX - ball._cx);
-      let dif = Math.abs(a - ball._last);
-      if (dif > Math.PI) dif = 2 * Math.PI - dif;
+      let d = a - ball._last;
+      if (d > Math.PI) d -= 2 * Math.PI;
+      else if (d < -Math.PI) d += 2 * Math.PI;
       ball._last = a;
-      ball._moved += dif;
-      if (ball._moved > 0.12) { // なぞり始め → 音が育つ
+      ball._moved += Math.abs(d);
+      if (ball._moved > 0.12) {
+        // 時計回り(+)で音が育ち、反時計回り(−)で鎮まっていく
         ensureNode(ball);
-        setBallGain(ball, Math.min(0.16, (ball.gain || 0) + dif * 0.05));
-        btn.classList.add("on");
+        const g = Math.max(0, Math.min(0.16, (ball.gain || 0) + d * 0.05));
+        setBallGain(ball, g);
+        btn.classList.toggle("on", g > 0.012);
       }
     });
     const finish = () => {
@@ -1507,13 +1617,15 @@
           btn.classList.remove("on");
         }
       } else {
-        // なぞり終わり: 十分育っていれば鳴りっぱなし
+        // なぞり終わり: 十分育っていれば鳴りっぱなし。反時計回りで消していたら停止
         if ((ball.gain || 0) >= 0.05) {
           ball.ringing = true;
-        } else {
+        } else if ((ball.gain || 0) < 0.015) {
           killNode(ball, 0.8);
           ball.ringing = false;
           btn.classList.remove("on");
+        } else {
+          ball.ringing = true; // 小さな音でも保持 (さらに育てるのも鎮めるのも自由)
         }
       }
     };
@@ -1547,7 +1659,7 @@
         sel.appendChild(minus); sel.appendChild(kval); sel.appendChild(plus);
         cell.appendChild(btn); cell.appendChild(sel);
         grid.appendChild(cell);
-        const ball = { key, k: k0, freq: 440, el: btn, node: null, ringing: false };
+        const ball = { key, k: k0, freq: 440, el: btn, node: null, ringing: false, cell };
         ball.update = () => {
           ball.freq = phiHzOf(key) * Math.pow(PHI, ball.k);
           kval.textContent = "φ" + ball.k;
@@ -1560,6 +1672,35 @@
         phiBalls.push(ball);
       });
     });
+    // ===== 有機的な散らばり: 低い音ほど大きく・手前 (下) に =====
+    const SEATS = [[15, 76], [40, 82], [65, 77], [87, 70],
+                   [10, 50], [34, 56], [59, 53], [85, 46],
+                   [19, 27], [44, 31], [69, 25], [90, 18]];
+    const seats = SEATS.slice().sort((a, b) => b[1] - a[1]); // 下の席から
+    const byPitch = phiBalls.slice().sort((a, b) => a.freq - b.freq); // 低い音から
+    byPitch.forEach((ball, i) => {
+      const [x, y] = seats[i];
+      const t = i / (byPitch.length - 1);
+      ball.cell.style.left = x + "%";
+      ball.cell.style.top = y + "%";
+      ball.cell.style.width = (29 - 15 * t) + "%"; // 低音29% → 高音14%
+      ball.cell.style.zIndex = String(100 + Math.round(y));
+      const seed = ((i * 9301 + 49297) % 233280) / 233280;
+      ball.cell.style.animationDuration = (3 + seed * 3).toFixed(2) + "s";
+      ball.cell.style.animationDelay = (-seed * 4).toFixed(2) + "s";
+    });
+    // ===== 没入モードのバー (♪AI / ✕閉じる) =====
+    const bar = document.createElement("div");
+    bar.id = "cosmos-bar";
+    const aiB = document.createElement("button"); aiB.type = "button"; aiB.textContent = "♪";
+    const exB = document.createElement("button"); exB.type = "button"; exB.textContent = "✕";
+    bar.appendChild(aiB); bar.appendChild(exB);
+    grid.appendChild(bar);
+    aiB.addEventListener("click", () => {
+      const a = document.getElementById("phi-auto");
+      if (a) { a.click(); setTimeout(() => { aiB.textContent = melodyTimer ? "■" : "♪"; }, 60); }
+    });
+    exB.addEventListener("click", () => document.body.classList.remove("cosmos"));
   }
   function flashBall(b) {
     b.el.classList.add("hit");
@@ -1602,14 +1743,86 @@
   }
 
   // 実測値の更新に合わせて全リンを再チューニング (renderData から呼ばれる)
+  const phiPrevHz = {};
   function buildPhiPads(modes) {
     if (modes) phiLastModes = modes;
     buildPhiSky();
     buildOctRow();
     phiBalls.forEach(b => { if (b.update) b.update(); });
     octBalls.forEach(b => { if (b.update) b.update(); });
+    // 「地球が調律し直した」演出: 実測値が変わったら全鉢が順に明滅
+    if (modes) {
+      let changed = false;
+      ["F1", "F2", "F3", "F4"].forEach(k => {
+        const m = modes[k];
+        if (m && typeof m.hz === "number") {
+          if (phiPrevHz[k] !== undefined && phiPrevHz[k] !== m.hz) changed = true;
+          phiPrevHz[k] = m.hz;
+        }
+      });
+      if (changed) phiBalls.forEach((b, i) => setTimeout(() => flashBall(b), i * 90));
+    }
   }
   buildPhiPads(null);
+
+  // ===== 🌌 没入モード =====
+  const imBtn = document.getElementById("phi-immersive");
+  if (imBtn) imBtn.addEventListener("click", () => {
+    getAudioCtx();
+    document.body.classList.add("cosmos");
+    startLightningEcho();
+  });
+
+  // ===== 雷の合いの手 (没入モード中のみ) =====
+  // 世界の雷観測網 (Blitzortung) の一撃で、遠くの星が瞬き、一番低い鉢がかすかに鳴る
+  let lightningStarted = false;
+  function startLightningEcho() {
+    if (lightningStarted) return;
+    lightningStarted = true;
+    function lzw(data) {
+      const dict = {}; let currChar = data[0], oldPhrase = currChar;
+      const out = [currChar]; let code = 256, phrase;
+      for (let i = 1; i < data.length; i++) {
+        const cc = data.charCodeAt(i);
+        if (cc < 256) phrase = data[i];
+        else phrase = dict[cc] ? dict[cc] : (oldPhrase + currChar);
+        out.push(phrase); currChar = phrase[0];
+        dict[code] = oldPhrase + currChar; code++; oldPhrase = phrase;
+      }
+      return out.join("");
+    }
+    let last = 0, retryT = null;
+    function connect() {
+      let ws;
+      try { ws = new WebSocket("wss://ws1.blitzortung.org/"); } catch (e) { return retry(); }
+      ws.onopen = () => { try { ws.send(JSON.stringify({ a: 111 })); } catch (e) {} };
+      ws.onmessage = ev => {
+        if (!document.body.classList.contains("cosmos")) return;
+        const now = Date.now();
+        if (now - last < 7000) return; // 合いの手は7秒に1回まで
+        try {
+          const j = JSON.parse(lzw(String(ev.data)));
+          if (typeof j.lat !== "number") return;
+          last = now;
+          const pool = melodyPool();
+          if (pool.length) strike(pool[0].freq, 0.05, 5.5);
+          const grid = document.getElementById("phi-grid");
+          if (grid) {
+            const sp = document.createElement("div");
+            sp.className = "star-flash";
+            sp.style.left = (8 + Math.random() * 84) + "%";
+            sp.style.top = (5 + Math.random() * 42) + "%";
+            grid.appendChild(sp);
+            setTimeout(() => sp.remove(), 1600);
+          }
+        } catch (e) {}
+      };
+      ws.onclose = retry;
+      ws.onerror = () => { try { ws.close(); } catch (e) {} };
+    }
+    function retry() { clearTimeout(retryT); retryT = setTimeout(connect, 5000); }
+    connect();
+  }
 
   // ===== ♪ AI メロディ =====
   // 音の球の池を酔歩でたどる。リズムは 1 : 1/φ : φ の黄金比。
@@ -1630,7 +1843,7 @@
     g.gain.setValueAtTime(0.0001, ctx.currentTime);
     g.gain.linearRampToValueAtTime(gain, ctx.currentTime + 0.05);
     g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
-    o.connect(g); g.connect(ctx.destination);
+    o.connect(g); g.connect(ctx.destination); g.connect(getReverb());
     o.start(); o.stop(ctx.currentTime + dur + 0.1);
   }
 
