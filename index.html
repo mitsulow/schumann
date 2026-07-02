@@ -585,7 +585,7 @@
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
           <div class="jst-imgbox">
-            <img src="https://sos70.ru/provider.php?file=sra.jpg" alt="振幅グラフ">
+            <img src="https://sosrff.tsu.ru/new/sra.jpg" alt="振幅グラフ" onerror="this.onerror=null;this.src='https://sos70.ru/provider.php?file=sra.jpg'">
             <div class="jst-cover"></div>
           </div>
           <div class="jst-below"></div>
@@ -611,7 +611,7 @@
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
           <div class="jst-imgbox">
-            <img src="https://sos70.ru/provider.php?file=srq.jpg" alt="Q値グラフ">
+            <img src="https://sosrff.tsu.ru/new/srq.jpg" alt="Q値グラフ" onerror="this.onerror=null;this.src='https://sos70.ru/provider.php?file=srq.jpg'">
             <div class="jst-cover"></div>
           </div>
           <div class="jst-below"></div>
@@ -1060,8 +1060,21 @@
     });
   }
 
+  // ============ グラフ画像の鮮度維持 ============
+  // 数値 (JSON) は毎回キャッシュ無視で取るのに画像はキャッシュされたままだと
+  // 「数値が先行してグラフが遅れる」ズレが起きる。5分刻みのキャッシュバスターで再読込。
+  function refreshGraphImages() {
+    document.querySelectorAll(".jst-imgbox img").forEach(img => {
+      if (!img.dataset.base) img.dataset.base = img.getAttribute("src");
+      const sep = img.dataset.base.includes("?") ? "&" : "?";
+      const stamp = Math.floor(Date.now() / (5 * 60 * 1000)); // 5分刻み
+      img.src = img.dataset.base + sep + "t=" + stamp;
+    });
+  }
+
   buildJstOverlays();
-  setInterval(buildJstOverlays, 5 * 60 * 1000);
+  refreshGraphImages();
+  setInterval(() => { refreshGraphImages(); buildJstOverlays(); }, 5 * 60 * 1000);
   window.addEventListener("resize", () => buildJstOverlays());
   window.addEventListener("load", () => buildJstOverlays());
 </script>
