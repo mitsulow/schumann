@@ -6,24 +6,24 @@
 <title>Schumann Resonance Live — 地球の鼓動</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-void: #0a1233;
-    --bg-deep: #0e1a44;
-    --bg-card: rgba(18, 28, 66, 0.6);
-    --border: rgba(160, 140, 255, 0.12);
-    --border-glow: rgba(160, 140, 255, 0.35);
-    --text-primary: #e8e4f0;
-    --text-muted: #8a86a0;
-    --text-dim: #555270;
-    --accent-aurora: #7cf9d4;
-    --accent-violet: #a78bfa;
-    --accent-gold: #f0c674;
-    --accent-rose: #ff8fb1;
-    --confidence-high: #7cf9d4;
-    --confidence-mid: #f0c674;
-    --confidence-low: #ff8fb1;
+    --bg-void: #f4f2ec;
+    --bg-deep: #ece9e0;
+    --bg-card: rgba(255, 255, 255, 0.78);
+    --border: rgba(70, 80, 130, 0.14);
+    --border-glow: rgba(70, 80, 130, 0.3);
+    --text-primary: #2c2e3a;
+    --text-muted: #6b6e80;
+    --text-dim: #9a9dac;
+    --accent-aurora: #128a6c;
+    --accent-violet: #7a5fd0;
+    --accent-gold: #a37c22;
+    --accent-rose: #c8507a;
+    --confidence-high: #14a87c;
+    --confidence-mid: #c08a20;
+    --confidence-low: #d05a7a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -39,30 +39,33 @@
     content: "";
     position: fixed; inset: 0;
     background:
-      radial-gradient(ellipse at 65% 8%, rgba(60, 110, 240, 0.22), transparent 55%),
-      radial-gradient(ellipse at 15% 75%, rgba(90, 70, 220, 0.14), transparent 55%),
-      radial-gradient(ellipse at 50% 50%, rgba(240, 198, 116, 0.04), transparent 60%);
+      radial-gradient(ellipse at 65% 0%, rgba(90, 130, 230, 0.1), transparent 55%),
+      radial-gradient(ellipse at 10% 80%, rgba(190, 150, 60, 0.07), transparent 55%);
     pointer-events: none; z-index: 0;
   }
   body::after {
     content: "";
     position: fixed; inset: 0;
     background-image:
-      linear-gradient(rgba(160, 140, 255, 0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(160, 140, 255, 0.015) 1px, transparent 1px);
+      linear-gradient(rgba(60, 70, 120, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(60, 70, 120, 0.025) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none; z-index: 0;
   }
-  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
-  header { text-align: center; padding: 2rem 0 3rem; }
-  .mmm-badge {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.75rem; letter-spacing: 0.2em;
-    color: var(--accent-gold);
-    border: 1px solid rgba(240, 198, 116, 0.3);
-    padding: 0.4rem 1rem; border-radius: 100px;
-    margin-bottom: 1.5rem;
+  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0.6rem 1.5rem 6rem; }
+  header { text-align: center; padding: 0.4rem 0 0.9rem; }
+  .mmm-logo {
+    font-family: "Cinzel", serif;
+    font-weight: 700;
+    font-size: clamp(1.15rem, 4.6vw, 1.7rem);
+    letter-spacing: 0.32em;
+    text-indent: 0.32em;
+    background: linear-gradient(160deg, #c9a24a 8%, #8a6716 45%, #e2c070 70%, #7a5a12 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.7));
+    line-height: 1.25;
   }
   h1 {
     font-family: "Cormorant Garamond", serif;
@@ -239,7 +242,7 @@
   .manual-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
   .manual-input {
     flex: 1; min-width: 140px; padding: 0.7rem 1rem;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(40, 50, 90, 0.07);
     border: 1px solid var(--border); border-radius: 8px;
     color: var(--text-primary);
     font-family: "JetBrains Mono", monospace; font-size: 1rem;
@@ -252,7 +255,7 @@
   }
   .manual-octave input {
     width: 60px; padding: 0.5rem;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(40, 50, 90, 0.07);
     border: 1px solid var(--border); border-radius: 6px;
     color: var(--text-primary);
     font-family: "JetBrains Mono", monospace; text-align: center;
@@ -321,9 +324,9 @@
   /* ★ F1 ヒーロー */
   .f1-hero {
     text-align: center;
-    background: radial-gradient(ellipse at 50% 0%, rgba(124, 249, 212, 0.07), transparent 65%),
-                rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(124, 249, 212, 0.25);
+    background: radial-gradient(ellipse at 50% 0%, rgba(20, 150, 110, 0.08), transparent 65%),
+                rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(20, 120, 90, 0.25);
     border-radius: 18px;
     padding: 1.8rem 1.2rem 1.4rem;
     margin-bottom: 2rem;
@@ -336,15 +339,15 @@
   .f1-value {
     font-family: "JetBrains Mono", monospace;
     font-size: clamp(3.2rem, 12vw, 5.5rem);
-    font-weight: 700; color: #7cf9d4; line-height: 1;
-    text-shadow: 0 0 30px rgba(124, 249, 212, 0.35);
+    font-weight: 700; color: #0c8a68; line-height: 1;
+    text-shadow: 0 0 24px rgba(20, 168, 124, 0.25);
     font-variant-numeric: tabular-nums;
   }
   .f1-unit { font-size: 0.35em; color: var(--text-muted); margin-left: 0.3em; }
   .f1-meta { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.7; }
-  .f1-meta .up { color: #ff8fb1; }
-  .f1-meta .down { color: #8fb1ff; }
-  .f1-meta .flat { color: #7cf9d4; }
+  .f1-meta .up { color: #c8507a; }
+  .f1-meta .down { color: #4a6ec8; }
+  .f1-meta .flat { color: #128a6c; }
   .f1-confrow { margin-top: 0.7rem; }
   .f1-conf-label {
     font-family: "JetBrains Mono", monospace;
@@ -385,21 +388,22 @@
   }
   .jst-below .jb-now {
     position: absolute; top: 0.1rem; transform: translateX(-50%);
-    font-size: 0.85rem; color: #ff8fb1; font-weight: 700; white-space: nowrap;
+    font-size: 0.85rem; color: #c84470; font-weight: 700; white-space: nowrap;
   }
-  /* ★ オトヒカリ地球儀 (トップ) */
+  /* ★ 地球儀 (トップ): 白いページに開いた正方形の宇宙の窓 */
   .globe-wrap {
-    margin-bottom: 1.2rem;
-    border-radius: 18px;
+    max-width: min(92vw, 620px);
+    margin: 0 auto 0.4rem;
+    border-radius: 22px;
     overflow: hidden;
-    border: 1px solid rgba(127, 239, 176, 0.25);
-    box-shadow: 0 0 40px rgba(127, 239, 176, 0.08);
+    border: 1px solid rgba(40, 60, 130, 0.25);
+    box-shadow: 0 10px 40px rgba(30, 50, 120, 0.22);
     line-height: 0;
   }
   .globe-wrap iframe {
     width: 100%;
-    height: min(78vh, 660px);
-    min-height: 420px;
+    aspect-ratio: 1 / 1;
+    height: auto;
     border: none;
     display: block;
     background: #0a1440;
@@ -421,60 +425,130 @@
     font-family: "JetBrains Mono", monospace;
     font-size: clamp(2.4rem, 9vw, 3.6rem);
     font-weight: 700;
-    color: #7cf9d4;
-    text-shadow: 0 0 26px rgba(124, 249, 212, 0.4);
+    color: #0c8a68;
+    text-shadow: 0 0 22px rgba(20, 168, 124, 0.3);
     font-variant-numeric: tabular-nums;
     line-height: 1;
   }
-  .globe-f1 .gf1-unit { font-size: 0.4em; color: var(--text-muted); margin-left: 0.2em; }
-  /* 黄金比の音 (シンギング・アース) */
+  .globe-f1 .gf1-unit { margin-left: 0.12em; }
+  /* 黄金比の音 (シンギング・アース) — おりんの楽器 */
   .phi-wrap { padding: 0.4rem 0.4rem 0.8rem; }
-  .phi-explain { font-size: 0.85rem; line-height: 1.9; color: var(--text-muted); margin-bottom: 1rem; }
+  .phi-explain { font-size: 0.85rem; line-height: 1.9; color: var(--text-muted); margin-bottom: 0.9rem; }
   .phi-explain b { color: var(--accent-gold); font-family: "JetBrains Mono", monospace; }
-  .phi-pads {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.9rem;
+  /* べき乗セレクタ (ラジオ) */
+  .phi-exp-row {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 0.45rem; margin-bottom: 0.4rem;
   }
+  .phi-exp-label { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.1em; margin-right: 0.3rem; }
+  .phi-exp-row label { cursor: pointer; }
+  .phi-exp-row input { position: absolute; opacity: 0; pointer-events: none; }
+  .phi-exp-row span {
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.8rem;
+    padding: 0.28rem 0.75rem;
+    border-radius: 100px;
+    border: 1px solid rgba(120, 95, 30, 0.35);
+    color: #7a5f1e;
+    background: rgba(255, 255, 255, 0.6);
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .phi-exp-row input:checked + span {
+    background: linear-gradient(160deg, #e8c878, #b8903a);
+    color: #3a2a08;
+    border-color: #a37c22;
+    box-shadow: 0 2px 8px rgba(160, 120, 30, 0.35);
+    font-weight: 700;
+  }
+  /* おりんの舞台: 漆の台の上に大きさの違う4つの鈴 */
+  .phi-stage {
+    position: relative;
+    padding: 1.6rem 2% 0;
+    margin-top: 0.4rem;
+  }
+  .phi-pads {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3.5%;
+  }
+  .phi-rin { display: flex; flex-direction: column; align-items: center; position: relative; }
+  /* 鈴のサイズ: 一次が最大 → 四次が最小 (低い音ほど大きな鈴) */
+  .phi-rin[data-mode="F1"] { width: 27%; }
+  .phi-rin[data-mode="F2"] { width: 24%; }
+  .phi-rin[data-mode="F3"] { width: 21%; }
+  .phi-rin[data-mode="F4"] { width: 18.5%; }
   .phi-pad {
     position: relative;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    max-width: 190px;
-    margin: 0 auto;
     width: 100%;
-    border: 1.5px solid rgba(124, 249, 212, 0.3);
-    background: radial-gradient(circle at 38% 34%, rgba(124, 249, 212, 0.12), rgba(10, 18, 51, 0.9) 70%);
-    color: var(--text-primary);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: none;
     cursor: pointer;
+    /* 真鍮のおりん */
+    background:
+      radial-gradient(circle at 33% 28%, rgba(255, 248, 225, 0.95) 0%, rgba(255, 240, 200, 0.35) 18%, transparent 40%),
+      repeating-radial-gradient(circle at 50% 50%, transparent 0 9%, rgba(90, 60, 10, 0.08) 9.5% 10.5%, transparent 11% 20%),
+      radial-gradient(circle at 42% 36%, #f2d896 0%, #d9ae5f 40%, #a8802e 72%, #6e4d14 100%);
+    box-shadow:
+      inset 0 -8px 16px rgba(70, 45, 0, 0.45),
+      inset 0 6px 10px rgba(255, 244, 210, 0.55),
+      0 8px 18px rgba(70, 50, 10, 0.35);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: 1px;
     font-family: "Noto Serif JP", serif;
-    transition: box-shadow 0.6s, border-color 0.6s, transform 0.15s;
+    color: #4a3408;
+    transition: transform 0.12s, filter 0.5s;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    z-index: 1;
   }
-  .phi-pad:active { transform: scale(0.96); }
-  .phi-pad .pp-name { font-size: 1rem; font-weight: 700; letter-spacing: 0.1em; }
-  .phi-pad .pp-src { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; color: var(--text-muted); }
-  .phi-pad .pp-out { font-family: "JetBrains Mono", monospace; font-size: 0.78rem; color: var(--accent-gold); }
-  .phi-pad.on {
-    border-color: rgba(124, 249, 212, 0.9);
-    box-shadow: 0 0 28px rgba(124, 249, 212, 0.4), inset 0 0 30px rgba(124, 249, 212, 0.12);
-    animation: padPulse 4s ease-in-out infinite;
+  .phi-pad:active { transform: scale(0.955); }
+  .phi-pad .pp-name { font-size: clamp(0.7rem, 2.4vw, 1.05rem); font-weight: 700; letter-spacing: 0.08em; text-shadow: 0 1px 0 rgba(255,240,200,0.6); }
+  .phi-pad .pp-out { font-family: "JetBrains Mono", monospace; font-size: clamp(0.55rem, 1.8vw, 0.75rem); color: #6e4e10; }
+  .phi-pad .pp-src { font-family: "JetBrains Mono", monospace; font-size: clamp(0.48rem, 1.5vw, 0.62rem); color: rgba(90, 65, 15, 0.75); }
+  /* 鳴っている鈴: 金色に輝き、波紋が広がり続ける */
+  .phi-pad.on { filter: brightness(1.14) saturate(1.15); }
+  .phi-pad.on::before, .phi-pad.on::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid rgba(190, 140, 40, 0.6);
+    animation: rinRipple 2.8s ease-out infinite;
+    pointer-events: none;
   }
-  @keyframes padPulse {
-    0%, 100% { box-shadow: 0 0 24px rgba(124, 249, 212, 0.35), inset 0 0 26px rgba(124, 249, 212, 0.1); }
-    50% { box-shadow: 0 0 44px rgba(124, 249, 212, 0.6), inset 0 0 40px rgba(124, 249, 212, 0.2); }
+  .phi-pad.on::after { animation-delay: 1.4s; }
+  @keyframes rinRipple {
+    0% { transform: scale(1); opacity: 0.75; }
+    100% { transform: scale(1.65); opacity: 0; }
+  }
+  /* 座布団 (緋色) と漆の台 */
+  .phi-cushion {
+    width: 88%;
+    height: clamp(8px, 2.2vw, 14px);
+    margin-top: -4px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 35%, #c8404a 0%, #90202e 60%, #6a1420 100%);
+    box-shadow: 0 3px 7px rgba(60, 10, 15, 0.45);
+  }
+  .phi-base {
+    height: 14px;
+    margin: -5px 1% 0;
+    border-radius: 7px;
+    background: linear-gradient(180deg, #3a2418 0%, #241209 55%, #170a04 100%);
+    box-shadow: 0 4px 10px rgba(30, 15, 5, 0.4);
   }
   .phi-note { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.9rem; }
   /* ★ 折りたたみセクション */
   details.fold {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(124, 249, 212, 0.15);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(50, 70, 120, 0.16);
     border-radius: 14px;
     margin-bottom: 1rem;
     overflow: hidden;
@@ -493,17 +567,17 @@
     gap: 0.5rem;
     transition: background 0.2s;
   }
-  details.fold > summary:hover { background: rgba(240, 198, 116, 0.06); }
+  details.fold > summary:hover { background: rgba(163, 124, 34, 0.07); }
   details.fold > summary::-webkit-details-marker { display: none; }
   details.fold > summary::before {
     content: "▶";
     font-size: 0.7em;
-    color: rgba(124, 249, 212, 0.7);
+    color: rgba(18, 110, 84, 0.65);
     transition: transform 0.2s;
     flex-shrink: 0;
   }
   details.fold[open] > summary::before { transform: rotate(90deg); }
-  details.fold[open] > summary { border-bottom: 1px solid rgba(124, 249, 212, 0.12); }
+  details.fold[open] > summary { border-bottom: 1px solid rgba(50, 70, 120, 0.14); }
   details.fold > :not(summary) { margin-left: 0.8rem; margin-right: 0.8rem; }
   details.fold > section, details.fold > .graph-section, details.fold > h2 { margin-top: 1rem; }
   details.fold > :last-child:not(summary) { margin-bottom: 1rem; }
@@ -569,9 +643,7 @@
 <div class="wrap">
 
   <header>
-    <div class="mmm-badge">⚡ MASTER MIND MEMBERS ⚡</div>
-    <h1>Schumann Resonance <em>Live</em></h1>
-    <div class="subtitle">地球の鼓動を、15分ごとに自動読み取り</div>
+    <div class="mmm-logo">MASTER MIND MEMBERS</div>
     <div class="last-update">
       <span class="live-dot"></span>
       <span id="last-update">Loading...</span>
@@ -599,8 +671,20 @@
         オクターブ（2倍）ではなく黄金比で持ち上げた音どうしは、どこまでも割り切れない
         らせんのような響きになります。触れると音が重なり、離すと余韻を残して消えます。
       </p>
-      <div class="phi-pads" id="phi-pads"></div>
-      <p class="phi-note">※ スマホは消音モードだと鳴らないことがあります ・ 音はシンギングリンのようにゆっくり立ち上がります</p>
+      <div class="phi-exp-row" id="phi-exp-row">
+        <span class="phi-exp-label">φ のべき乗</span>
+        <label><input type="radio" name="phiExp" value="auto" checked><span>おまかせ</span></label>
+        <label><input type="radio" name="phiExp" value="6"><span>φ⁶</span></label>
+        <label><input type="radio" name="phiExp" value="7"><span>φ⁷</span></label>
+        <label><input type="radio" name="phiExp" value="8"><span>φ⁸</span></label>
+        <label><input type="radio" name="phiExp" value="9"><span>φ⁹</span></label>
+        <label><input type="radio" name="phiExp" value="10"><span>φ¹⁰</span></label>
+      </div>
+      <div class="phi-stage">
+        <div class="phi-pads" id="phi-pads"></div>
+        <div class="phi-base"></div>
+      </div>
+      <p class="phi-note">鈴に触れると鳴り、もう一度触れると余韻を残して鎮まります ・ 鳴らしたまま重ねられます<br>※ スマホは消音モードだと鳴らないことがあります</p>
     </div>
   </details>
 
@@ -1127,19 +1211,45 @@
     }, 3000);
   }
 
+  // 鳴っている最中でも周波数を滑らかに移調する (べき乗切替・データ更新時)
+  const BOWL_RATIOS = [1, 1.004, PHI, 2.009];
+  function retuneBowl(b, newFreq) {
+    const ctx = getAudioCtx();
+    b.oscs.forEach((o, i) => {
+      o.frequency.setTargetAtTime(newFreq * BOWL_RATIOS[i], ctx.currentTime, 0.25);
+    });
+  }
+
+  let phiExp = "auto";
+  let phiLastModes = null;
+
+  function phiFreqFor(hz) {
+    if (phiExp === "auto") return phiAudible(hz);
+    const k = parseInt(phiExp, 10);
+    return { v: hz * Math.pow(PHI, k), k };
+  }
+
   function buildPhiPads(modes) {
+    if (modes) phiLastModes = modes;
     const wrap = document.getElementById("phi-pads");
     if (!wrap) return;
     ["F1", "F2", "F3", "F4"].forEach(key => {
-      const hz = modes && modes[key] && typeof modes[key].hz === "number"
-        ? modes[key].hz : MODE_INFO[key].theory;
-      const a = phiAudible(hz);
+      const m = phiLastModes && phiLastModes[key];
+      const hz = m && typeof m.hz === "number" ? m.hz : MODE_INFO[key].theory;
+      const a = phiFreqFor(hz);
       let st = phiState[key];
       if (!st) {
+        const rin = document.createElement("div");
+        rin.className = "phi-rin";
+        rin.dataset.mode = key;
         const pad = document.createElement("button");
         pad.className = "phi-pad";
         pad.type = "button";
-        wrap.appendChild(pad);
+        const cushion = document.createElement("div");
+        cushion.className = "phi-cushion";
+        rin.appendChild(pad);
+        rin.appendChild(cushion);
+        wrap.appendChild(rin);
         st = phiState[key] = { pad, bowl: null, freq: a.v };
         pad.addEventListener("click", () => {
           if (st.bowl) {
@@ -1151,15 +1261,24 @@
           }
         });
       }
-      // 再生中は周波数を据え置き (音が途中で跳ねないように)。停止中のみ最新値へ
-      if (!st.bowl) st.freq = a.v;
+      st.freq = a.v;
+      if (st.bowl) retuneBowl(st.bowl, a.v); // 鳴らしたまま滑らかに移調
       st.pad.innerHTML =
         '<span class="pp-name">' + PHI_NAMES[key] + '</span>' +
-        '<span class="pp-src">' + hz.toFixed(2) + 'Hz × φ<sup>' + a.k + '</sup></span>' +
-        '<span class="pp-out">= ' + a.v.toFixed(1) + ' Hz</span>';
+        '<span class="pp-src">' + hz.toFixed(2) + 'Hz×φ<sup>' + a.k + '</sup></span>' +
+        '<span class="pp-out">' + (a.v >= 1000 ? Math.round(a.v) : a.v.toFixed(1)) + 'Hz</span>';
     });
   }
   buildPhiPads(null);
+
+  // べき乗ラジオ
+  document.querySelectorAll('#phi-exp-row input[name="phiExp"]').forEach(r => {
+    r.addEventListener("change", () => {
+      if (!r.checked) return;
+      phiExp = r.value;
+      buildPhiPads(null);
+    });
+  });
 
   function renderPolarization(pol) {
     const banner = document.getElementById("polarization-banner");
