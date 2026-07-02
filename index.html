@@ -1010,12 +1010,15 @@
       if (!m || !cover || !below) return;
       const pos = g => (m.x0 + g / 72 * (m.x1 - m.x0)) / m.w * 100;
 
-      // 黒カバー: 画像内ラベル帯の高さに合わせる
-      cover.style.height = ((m.h - m.coverTop) / m.h * 100) + "%";
       // フォントは表示幅に応じてスケール
       const dispW = img.clientWidth || 700;
+      const dispH = img.clientHeight || dispW * m.h / m.w;
       const fs = Math.max(8.5, Math.min(14, dispW / 55));
       cover.style.fontSize = fs + "px";
+      // 黒カバー: 画像内ラベル帯を隠しつつ、文字が必ず収まる高さを確保
+      // (スペクトログラムはラベル帯が薄いので、スマホでは帯より文字サイズが優先)
+      const stripPx = (m.h - m.coverTop) / m.h * dispH;
+      cover.style.height = Math.max(stripPx, fs + 4) + "px";
       cover.innerHTML = "";
       below.innerHTML = "";
 
