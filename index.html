@@ -55,7 +55,7 @@
   /* ★ 黒バンド (ロゴ〜地球儀〜鼠色グラフ): ここだけ宇宙 */
   .hero-dark {
     background: linear-gradient(180deg, #03050c 0%, #05070f 60%, #070a14 100%);
-    padding: 0.7rem 0 1.6rem;
+    padding: 0.7rem 0 1rem;
   }
   .hero-inner { max-width: 1200px; margin: 0 auto; }
   .hero-dark .last-update { color: #6d7288; }
@@ -68,6 +68,17 @@
     filter: none;
   }
   .hero-dark .mmm-logo .bolt { filter: drop-shadow(0 0 6px rgba(82, 250, 140, 0.6)); }
+  .mmm-sub {
+    font-family: "Cinzel", serif;
+    font-weight: 500;
+    font-size: clamp(0.62rem, 2.6vw, 0.95rem);
+    letter-spacing: 0.42em;
+    text-indent: 0.42em;
+    color: #52fa8c;
+    text-shadow: 0 0 10px rgba(82, 250, 140, 0.45);
+    margin-top: 0.3rem;
+    white-space: nowrap;
+  }
   .hero-dark .globe-f1 .gf1-label { color: #7d829a; }
   .hero-dark .globe-f1 .gf1-value {
     color: #7cf9d4;
@@ -84,7 +95,9 @@
     color: #b8ffe8;
     box-shadow: 0 0 26px rgba(124, 249, 212, 0.6);
   }
-  .hero-dark #f1-spark-top { background: #42464f; } /* 鼠色 */
+  /* 鼠色グラフ: 白背景の上に置く */
+  .spark-wrap { text-align: center; }
+  .spark-wrap #f1-spark-top { margin-top: 0.2rem; }
   .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem 6rem;
     display: flex; flex-direction: column; }
   .wrap > * { width: 100%; }
@@ -453,8 +466,7 @@
   /* 地球儀の下: 今のシューマン共振 */
   .globe-f1 {
     text-align: center;
-    padding: 0.9rem 0 1.1rem;
-    margin-bottom: 1rem;
+    padding: 0.9rem 0 0.2rem;
   }
   .globe-f1 .gf1-label {
     display: block;
@@ -464,12 +476,11 @@
     margin-bottom: 0.15rem;
   }
   .globe-f1 .gf1-value {
-    font-family: "JetBrains Mono", monospace;
-    font-size: clamp(2.4rem, 9vw, 3.6rem);
+    font-family: "Cinzel", serif;
+    font-size: clamp(2.6rem, 10vw, 4rem);
     font-weight: 700;
     color: #0c8a68;
     text-shadow: 0 0 22px rgba(20, 168, 124, 0.3);
-    font-variant-numeric: tabular-nums;
     line-height: 1;
   }
   .globe-f1 .gf1-unit { margin-left: 0.12em; }
@@ -785,6 +796,7 @@
 
     <header>
       <div class="mmm-logo"><span class="bolt">⚡</span><span class="mmm-text">MASTER MIND MEMBERS</span><span class="bolt">⚡</span></div>
+      <div class="mmm-sub">SCHUMANN RESONANCE NOW</div>
       <div class="last-update">
         <span class="live-dot"></span>
         <span id="last-update">Loading...</span>
@@ -802,13 +814,17 @@
         <button id="gf1-play" class="gf1-play" type="button">▶</button>
         <span class="gf1-value" id="globe-f1-value">—.——</span><span class="gf1-value gf1-unit">Hz</span>
       </div>
-      <canvas id="f1-spark-top" width="900" height="150"></canvas>
     </div>
 
   </div>
 </div>
 
 <div class="wrap">
+
+  <!-- 鼠色グラフは白背景の上でこそ映える -->
+  <div class="spark-wrap">
+    <canvas id="f1-spark-top" width="900" height="150"></canvas>
+  </div>
 
   <div class="error-banner" id="error-banner">データ取得中にエラーが発生しました。</div>
 
