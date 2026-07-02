@@ -9,9 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-void: #05060e;
-    --bg-deep: #0a0c1a;
-    --bg-card: rgba(15, 18, 35, 0.6);
+    --bg-void: #0a1233;
+    --bg-deep: #0e1a44;
+    --bg-card: rgba(18, 28, 66, 0.6);
     --border: rgba(160, 140, 255, 0.12);
     --border-glow: rgba(160, 140, 255, 0.35);
     --text-primary: #e8e4f0;
@@ -39,9 +39,9 @@
     content: "";
     position: fixed; inset: 0;
     background:
-      radial-gradient(ellipse at 20% 10%, rgba(124, 249, 212, 0.08), transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(167, 139, 250, 0.08), transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(240, 198, 116, 0.03), transparent 60%);
+      radial-gradient(ellipse at 65% 8%, rgba(60, 110, 240, 0.22), transparent 55%),
+      radial-gradient(ellipse at 15% 75%, rgba(90, 70, 220, 0.14), transparent 55%),
+      radial-gradient(ellipse at 50% 50%, rgba(240, 198, 116, 0.04), transparent 60%);
     pointer-events: none; z-index: 0;
   }
   body::after {
@@ -402,8 +402,75 @@
     min-height: 420px;
     border: none;
     display: block;
-    background: #050510;
+    background: #0a1440;
   }
+  /* 地球儀の下: 今のシューマン共振 */
+  .globe-f1 {
+    text-align: center;
+    padding: 0.9rem 0 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .globe-f1 .gf1-label {
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    margin-bottom: 0.15rem;
+  }
+  .globe-f1 .gf1-value {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(2.4rem, 9vw, 3.6rem);
+    font-weight: 700;
+    color: #7cf9d4;
+    text-shadow: 0 0 26px rgba(124, 249, 212, 0.4);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .globe-f1 .gf1-unit { font-size: 0.4em; color: var(--text-muted); margin-left: 0.2em; }
+  /* 黄金比の音 (シンギング・アース) */
+  .phi-wrap { padding: 0.4rem 0.4rem 0.8rem; }
+  .phi-explain { font-size: 0.85rem; line-height: 1.9; color: var(--text-muted); margin-bottom: 1rem; }
+  .phi-explain b { color: var(--accent-gold); font-family: "JetBrains Mono", monospace; }
+  .phi-pads {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.9rem;
+  }
+  .phi-pad {
+    position: relative;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    max-width: 190px;
+    margin: 0 auto;
+    width: 100%;
+    border: 1.5px solid rgba(124, 249, 212, 0.3);
+    background: radial-gradient(circle at 38% 34%, rgba(124, 249, 212, 0.12), rgba(10, 18, 51, 0.9) 70%);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-family: "Noto Serif JP", serif;
+    transition: box-shadow 0.6s, border-color 0.6s, transform 0.15s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .phi-pad:active { transform: scale(0.96); }
+  .phi-pad .pp-name { font-size: 1rem; font-weight: 700; letter-spacing: 0.1em; }
+  .phi-pad .pp-src { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; color: var(--text-muted); }
+  .phi-pad .pp-out { font-family: "JetBrains Mono", monospace; font-size: 0.78rem; color: var(--accent-gold); }
+  .phi-pad.on {
+    border-color: rgba(124, 249, 212, 0.9);
+    box-shadow: 0 0 28px rgba(124, 249, 212, 0.4), inset 0 0 30px rgba(124, 249, 212, 0.12);
+    animation: padPulse 4s ease-in-out infinite;
+  }
+  @keyframes padPulse {
+    0%, 100% { box-shadow: 0 0 24px rgba(124, 249, 212, 0.35), inset 0 0 26px rgba(124, 249, 212, 0.1); }
+    50% { box-shadow: 0 0 44px rgba(124, 249, 212, 0.6), inset 0 0 40px rgba(124, 249, 212, 0.2); }
+  }
+  .phi-note { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.9rem; }
   /* ★ 折りたたみセクション */
   details.fold {
     background: rgba(255, 255, 255, 0.02);
@@ -511,12 +578,31 @@
     </div>
   </header>
 
-  <!-- ★★ オトヒカリ: 光の音柱 (このサイトの顔) ★★ -->
+  <!-- ★★ 地球儀: 世界の雷がリアルタイムで光る (このサイトの顔) ★★ -->
   <section class="globe-wrap">
-    <iframe src="./globe.html" title="オトヒカリ — 光の音柱" allow="gyroscope"></iframe>
+    <iframe src="./globe.html" title="地球儀 — 世界の雷とシューマン共振" allow="gyroscope"></iframe>
   </section>
 
+  <div class="globe-f1">
+    <span class="gf1-label">今のシューマン共振</span>
+    <span class="gf1-value" id="globe-f1-value">—.——</span><span class="gf1-value gf1-unit">Hz</span>
+  </div>
+
   <div class="error-banner" id="error-banner">データ取得中にエラーが発生しました。</div>
+
+  <details class="fold">
+    <summary>🎵 黄金比の音 — シューマン共振を可聴域へ（シンギング・アース）</summary>
+    <div class="phi-wrap">
+      <p class="phi-explain">
+        黄金比 φ = <b>1.61803399</b>（小数点第8位）。いま観測されているシューマン共振の周波数に
+        φ を何度もかけて（φⁿ 倍）、人の耳に聞こえる高さまで持ち上げます。
+        オクターブ（2倍）ではなく黄金比で持ち上げた音どうしは、どこまでも割り切れない
+        らせんのような響きになります。触れると音が重なり、離すと余韻を残して消えます。
+      </p>
+      <div class="phi-pads" id="phi-pads"></div>
+      <p class="phi-note">※ スマホは消音モードだと鳴らないことがあります ・ 音はシンギングリンのようにゆっくり立ち上がります</p>
+    </div>
+  </details>
 
   <details class="fold">
     <summary>📈 シューマン共振のいま — F1詳細・24時間推移・F2〜F4</summary>
@@ -823,6 +909,7 @@
     document.getElementById("last-update").textContent = "UPDATED " + jst + " JST";
     renderF1(data);
     renderModes(data.modes);
+    buildPhiPads(data.modes);
     if (data.polarization) renderPolarization(data.polarization);
     if (data.notes) {
       document.getElementById("observation").style.display = "block";
@@ -853,6 +940,9 @@
       big.textContent = "—.——";
       meta.textContent = "F1 データ欠損中 (観測所側)";
     }
+    // 地球儀の下の大きな表示にも反映
+    const gv = document.getElementById("globe-f1-value");
+    if (gv) gv.textContent = hz != null ? hz.toFixed(2) : "—.——";
     const confClass = conf >= 75 ? "high" : conf >= 50 ? "mid" : "low";
     fill.className = "confidence-fill " + confClass;
     fill.style.width = conf + "%";
@@ -984,6 +1074,92 @@
       });
     });
   }
+
+  // ===== 黄金比の音 (シンギング・アース) =====
+  // シューマン共振の実測値に黄金比 φ を何度もかけて可聴域へ持ち上げ、
+  // シンギングリンのような揺らぎのある音で鳴らす。タップで重ねる楽器。
+  const PHI = 1.61803399; // 黄金比 (1+√5)/2 = 1.6180339887… → 小数点第8位
+  const PHI_NAMES = { F1: "第一次", F2: "第二次", F3: "第三次", F4: "第四次" };
+  const phiState = {};
+
+  function phiAudible(f) {
+    let k = 0, v = f;
+    while (v < 220) { v *= PHI; k++; }
+    if (v > 1500) { v /= PHI; k--; }
+    return { v, k };
+  }
+
+  function startBowl(freq) {
+    const ctx = getAudioCtx();
+    const master = ctx.createGain(); master.gain.value = 0;
+    // シンギングリン: 基音 + わずかにずれた相方 (うなり) + φ 上音 + かすかな金属倍音
+    const partials = [
+      { f: freq,         g: 0.50 },
+      { f: freq * 1.004, g: 0.34 },
+      { f: freq * PHI,   g: 0.10 },
+      { f: freq * 2.009, g: 0.07 },
+    ];
+    const oscs = partials.map(p => {
+      const o = ctx.createOscillator(); o.type = "sine"; o.frequency.value = p.f;
+      const g = ctx.createGain(); g.gain.value = p.g;
+      o.connect(g); g.connect(master); o.start();
+      return o;
+    });
+    // ゆっくりした揺らぎ (擦り続けるリンの呼吸)
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.13 + Math.random() * 0.09;
+    const lfoG = ctx.createGain(); lfoG.gain.value = 0.05;
+    lfo.connect(lfoG); lfoG.connect(master.gain); lfo.start();
+    master.connect(ctx.destination);
+    master.gain.setValueAtTime(0.0001, ctx.currentTime);
+    master.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 1.8);
+    return { oscs, lfo, master };
+  }
+
+  function stopBowl(b) {
+    const ctx = getAudioCtx();
+    b.master.gain.cancelScheduledValues(ctx.currentTime);
+    b.master.gain.setValueAtTime(Math.max(b.master.gain.value, 0.0001), ctx.currentTime);
+    b.master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.8); // 余韻
+    setTimeout(() => {
+      b.oscs.forEach(o => { try { o.stop(); } catch (e) {} });
+      try { b.lfo.stop(); } catch (e) {}
+      b.master.disconnect();
+    }, 3000);
+  }
+
+  function buildPhiPads(modes) {
+    const wrap = document.getElementById("phi-pads");
+    if (!wrap) return;
+    ["F1", "F2", "F3", "F4"].forEach(key => {
+      const hz = modes && modes[key] && typeof modes[key].hz === "number"
+        ? modes[key].hz : MODE_INFO[key].theory;
+      const a = phiAudible(hz);
+      let st = phiState[key];
+      if (!st) {
+        const pad = document.createElement("button");
+        pad.className = "phi-pad";
+        pad.type = "button";
+        wrap.appendChild(pad);
+        st = phiState[key] = { pad, bowl: null, freq: a.v };
+        pad.addEventListener("click", () => {
+          if (st.bowl) {
+            stopBowl(st.bowl); st.bowl = null;
+            st.pad.classList.remove("on");
+          } else {
+            st.bowl = startBowl(st.freq);
+            st.pad.classList.add("on");
+          }
+        });
+      }
+      // 再生中は周波数を据え置き (音が途中で跳ねないように)。停止中のみ最新値へ
+      if (!st.bowl) st.freq = a.v;
+      st.pad.innerHTML =
+        '<span class="pp-name">' + PHI_NAMES[key] + '</span>' +
+        '<span class="pp-src">' + hz.toFixed(2) + 'Hz × φ<sup>' + a.k + '</sup></span>' +
+        '<span class="pp-out">= ' + a.v.toFixed(1) + ' Hz</span>';
+    });
+  }
+  buildPhiPads(null);
 
   function renderPolarization(pol) {
     const banner = document.getElementById("polarization-banner");
