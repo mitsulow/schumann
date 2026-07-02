@@ -1561,10 +1561,11 @@
   setInterval(loadData, 5 * 60 * 1000);
 
   // ============ 日本時刻オーバーレイ ============
-  // 画像内のトムスク時刻目盛り (下端) を黒で覆い、同じ位置に JST を直接描く。
-  // 日付と ▲今 は画像の下に大きめのフォントで出す。
-  // 画像の時刻軸はトムスク地方時 (UTC+7) = 日本 (UTC+9) の −2時間。
+  // 画像内の時刻目盛り (下端) を黒で覆い、同じ位置に JST を直接描く。
+  // ★時刻軸は UTC+8 (2026-07-02 実測校正: +7 だとデータが1時間「未来」になる。
+  //   観測サーバーが旧恒久サマータイム時代の設定のままと推定) = JST −1時間。
   // レイアウト実測値: プロット x 範囲 (3日=72時間) と、時刻ラベル帯の縦位置
+  const AXIS_UTC_OFFSET = 8;
   const RULER_METRICS = {
     line: { w: 1006, h: 340, x0: 71, x1: 935, coverTop: 311 },  // srf / sra / srq 共通
     shm:  { w: 1540, h: 460, x0: 61, x1: 1503, coverTop: 440 }  // スペクトログラム
@@ -1572,11 +1573,11 @@
 
   function buildJstOverlays() {
     const now = new Date();
-    // グラフ左端 = トムスクの一昨日 00:00 (UTC epoch で)
-    const tomskNow = new Date(now.getTime() + 7 * 3600e3);
+    // グラフ左端 = 軸タイムゾーンでの一昨日 00:00 (UTC epoch で)
+    const axisNow = new Date(now.getTime() + AXIS_UTC_OFFSET * 3600e3);
     const day1Utc = Date.UTC(
-      tomskNow.getUTCFullYear(), tomskNow.getUTCMonth(), tomskNow.getUTCDate()
-    ) - 7 * 3600e3 - 2 * 86400e3;
+      axisNow.getUTCFullYear(), axisNow.getUTCMonth(), axisNow.getUTCDate()
+    ) - AXIS_UTC_OFFSET * 3600e3 - 2 * 86400e3;
 
     document.querySelectorAll(".jst-graph").forEach(wrap => {
       const m = RULER_METRICS[wrap.dataset.metrics];
