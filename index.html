@@ -329,6 +329,22 @@
   }
   .manual-btn:hover { background: rgba(167, 139, 250, 0.3); }
   .manual-btn.playing { background: var(--accent-violet); color: var(--bg-void); }
+  /* 透明クリスタルの再生ボタン */
+  .crystal-manual, .crystal-manual:hover, .crystal-manual.playing {
+    background: none; border: none; padding: 0;
+    width: 92px; flex-shrink: 0;
+  }
+  .crystal-manual img { width: 100%; display: block; transition: filter 0.3s; pointer-events: none; }
+  .crystal-manual.playing img { filter: drop-shadow(0 0 20px rgba(150, 185, 255, 0.95)); }
+  .crystal-manual:active { transform: scale(0.94); }
+  /* 6オクターブのクリスタル4つ */
+  .oct-row {
+    display: flex;
+    justify-content: center;
+    gap: 2.5%;
+    padding: 0.5rem 0.6rem 0.2rem;
+  }
+  .oct-row .rin-btn { width: 22%; max-width: 130px; }
   .manual-display {
     margin-top: 1rem; padding: 0.75rem 1rem;
     background: rgba(0, 0, 0, 0.2); border-radius: 8px;
@@ -939,6 +955,8 @@
 
   <div class="fold-subh">音で聴くシューマン共振</div>
 
+  <div class="oct-row" id="oct-row"></div>
+
   <!-- ★ F1 ヒーロー: このサイトの主役 = 第一次モード -->
   <section class="f1-hero">
     <div class="f1-label">F1 — FUNDAMENTAL MODE ・ 地球の基音</div>
@@ -971,7 +989,7 @@
         <input type="number" id="manual-oct" value="6" min="0" max="12" step="1">
         <span>オクターブ</span>
       </div>
-      <button class="manual-btn" id="manual-btn">▶ PLAY</button>
+      <button class="manual-btn crystal-manual" id="manual-btn" title="鳴らす / 止める"><img src="crystal_clear.png" alt="鳴らす" draggable="false"></button>
     </div>
     <div class="manual-display">
       入力: <strong id="manual-in">7.83</strong> Hz  →  再生: <strong id="manual-out">501.12</strong> Hz
@@ -982,8 +1000,9 @@
 
   <div class="phi-wrap">
     <p class="phi-explain">
-      いまのシューマン共振 4音 × 黄金比 φ = <b>1.61803399</b> のべき乗。
-      色はグラフの4モードに対応。リンに触れると鳴り続け、重ねるとハーモニーになります。
+      いまのシューマン共振 4音 × 黄金比 φ = <b>1.61803399</b> のべき乗。色はグラフの4モードに対応。
+      本物の水晶リンのように、<b>縁を指でくるくるなぞると音が育って、鳴りっぱなし</b>になります。
+      鳴っているリンに軽くタップすると鎮まります。
     </p>
     <div class="phi-auto-row">
       <button id="phi-auto" class="phi-auto" type="button">♪ AI メロディ</button>
@@ -1415,9 +1434,93 @@
     return m && typeof m.hz === "number" ? m.hz : MODE_INFO[key].theory;
   }
 
-  // ===== シンギングリンの祭壇: 4色 × 3列 = 12鉢 =====
-  // 触れると鳴り続け (サステイン)、重ねるとハーモニー。φ のべき乗は各リンで変更可
+  // ===== 水晶リンの祭壇: 4色 × 3列 = 12鉢 =====
+  // 本物の水晶リンのように「縁をなぞると音が育ち、鳴りっぱなしになる」
+  // 鳴っているリンを軽くタップすると鎮まる。静かなリンをタップすると一打だけ響く
   const phiBalls = [];
+
+  function ensureNode(ball) {
+    if (ball.node) return;
+    const ctx = getAudioCtx();
+    const o = ctx.createOscillator(); o.type = "sine"; o.frequency.value = ball.freq;
+    const g = ctx.createGain(); g.gain.value = 0.0001;
+    o.connect(g); g.connect(ctx.destination); o.start();
+    ball.node = { osc: o, master: g };
+    ball.gain = 0;
+  }
+  function setBallGain(ball, g) {
+    if (!ball.node) return;
+    ball.gain = g;
+    ball.node.master.gain.setTargetAtTime(Math.max(g, 0.0001), getAudioCtx().currentTime, 0.09);
+  }
+  function killNode(ball, fadeSec) {
+    if (!ball.node) return;
+    const ctx = getAudioCtx();
+    const n = ball.node; ball.node = null; ball.gain = 0;
+    n.master.gain.cancelScheduledValues(ctx.currentTime);
+    n.master.gain.setValueAtTime(Math.max(n.master.gain.value, 0.0001), ctx.currentTime);
+    n.master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + fadeSec);
+    setTimeout(() => { try { n.osc.stop(); } catch (e) {} n.master.disconnect(); }, fadeSec * 1000 + 120);
+  }
+
+  function wireRub(ball, btn) {
+    btn.style.touchAction = "none";
+    btn.addEventListener("pointerdown", e => {
+      e.preventDefault();
+      try { btn.setPointerCapture(e.pointerId); } catch (err) {}
+      getAudioCtx();
+      const r = btn.getBoundingClientRect();
+      ball._cx = r.left + r.width / 2;
+      ball._cy = r.top + r.height * 0.4;
+      ball._last = Math.atan2(e.clientY - ball._cy, e.clientX - ball._cx);
+      ball._moved = 0;
+      ball._active = true;
+      btn.classList.add("rub");
+    });
+    btn.addEventListener("pointermove", e => {
+      if (!ball._active) return;
+      const a = Math.atan2(e.clientY - ball._cy, e.clientX - ball._cx);
+      let dif = Math.abs(a - ball._last);
+      if (dif > Math.PI) dif = 2 * Math.PI - dif;
+      ball._last = a;
+      ball._moved += dif;
+      if (ball._moved > 0.12) { // なぞり始め → 音が育つ
+        ensureNode(ball);
+        setBallGain(ball, Math.min(0.16, (ball.gain || 0) + dif * 0.05));
+        btn.classList.add("on");
+      }
+    });
+    const finish = () => {
+      if (!ball._active) return;
+      ball._active = false;
+      btn.classList.remove("rub");
+      if (ball._moved < 0.22) {
+        // 軽いタップ
+        if (ball.ringing) {          // 鳴っている → 鎮める
+          killNode(ball, 2.2);
+          ball.ringing = false;
+          btn.classList.remove("on");
+        } else {                     // 静か → 一打だけ
+          killNode(ball, 0.15);
+          strike(ball.freq, 0.08, 1.7);
+          flashBall(ball);
+          btn.classList.remove("on");
+        }
+      } else {
+        // なぞり終わり: 十分育っていれば鳴りっぱなし
+        if ((ball.gain || 0) >= 0.05) {
+          ball.ringing = true;
+        } else {
+          killNode(ball, 0.8);
+          ball.ringing = false;
+          btn.classList.remove("on");
+        }
+      }
+    };
+    btn.addEventListener("pointerup", finish);
+    btn.addEventListener("pointercancel", finish);
+  }
+
   function buildPhiSky() {
     const grid = document.getElementById("phi-grid");
     if (!grid || phiBalls.length) return;
@@ -1430,7 +1533,7 @@
         btn.type = "button";
         btn.className = "rin-btn " + PHI_MODE_CLS[key];
         const img = document.createElement("img");
-        img.src = "bowl_" + PHI_MODE_CLS[key] + ".png";
+        img.src = "crystal_" + PHI_MODE_CLS[key] + ".png";
         img.alt = "";
         img.draggable = false;
         btn.appendChild(img);
@@ -1444,22 +1547,14 @@
         sel.appendChild(minus); sel.appendChild(kval); sel.appendChild(plus);
         cell.appendChild(btn); cell.appendChild(sel);
         grid.appendChild(cell);
-        const ball = { key, k: k0, freq: 440, el: btn, bowl: null };
+        const ball = { key, k: k0, freq: 440, el: btn, node: null, ringing: false };
         ball.update = () => {
           ball.freq = phiHzOf(key) * Math.pow(PHI, ball.k);
           kval.textContent = "φ" + ball.k;
-          if (ball.bowl) retuneBowl(ball.bowl, ball.freq); // 鳴らしたまま滑らかに移調
+          if (ball.node) ball.node.osc.frequency.setTargetAtTime(ball.freq, getAudioCtx().currentTime, 0.15);
         };
         ball.update();
-        btn.addEventListener("click", () => {
-          if (ball.bowl) {
-            stopBowl(ball.bowl); ball.bowl = null;
-            btn.classList.remove("on");
-          } else {
-            ball.bowl = startBowl(ball.freq);
-            btn.classList.add("on");
-          }
-        });
+        wireRub(ball, btn);
         minus.addEventListener("click", () => { if (ball.k > 4) { ball.k--; ball.update(); } });
         plus.addEventListener("click", () => { if (ball.k < 11) { ball.k++; ball.update(); } });
         phiBalls.push(ball);
@@ -1470,11 +1565,49 @@
     b.el.classList.add("hit");
     setTimeout(() => b.el.classList.remove("hit"), 300);
   }
+
+  // ===== 音で聴くセクション: 4モードの6オクターブ上クリスタル (タップで鳴る/止まる) =====
+  const octBalls = [];
+  function buildOctRow() {
+    const row = document.getElementById("oct-row");
+    if (!row || octBalls.length) return;
+    ["F1", "F2", "F3", "F4"].forEach(key => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "rin-btn " + PHI_MODE_CLS[key];
+      btn.title = key + " を6オクターブ上で聴く";
+      const img = document.createElement("img");
+      img.src = "crystal_" + PHI_MODE_CLS[key] + ".png";
+      img.alt = key;
+      img.draggable = false;
+      btn.appendChild(img);
+      row.appendChild(btn);
+      const ob = { key, freq: 500, el: btn, bowl: null };
+      ob.update = () => {
+        ob.freq = phiHzOf(key) * 64; // 6オクターブ上
+        if (ob.bowl) retuneBowl(ob.bowl, ob.freq);
+      };
+      ob.update();
+      btn.addEventListener("click", () => {
+        if (ob.bowl) {
+          stopBowl(ob.bowl); ob.bowl = null;
+          btn.classList.remove("on");
+        } else {
+          ob.bowl = startBowl(ob.freq);
+          btn.classList.add("on");
+        }
+      });
+      octBalls.push(ob);
+    });
+  }
+
   // 実測値の更新に合わせて全リンを再チューニング (renderData から呼ばれる)
   function buildPhiPads(modes) {
     if (modes) phiLastModes = modes;
     buildPhiSky();
+    buildOctRow();
     phiBalls.forEach(b => { if (b.update) b.update(); });
+    octBalls.forEach(b => { if (b.update) b.update(); });
   }
   buildPhiPads(null);
 
@@ -1613,7 +1746,6 @@
     if (activeOscillators["manual"]) {
       stopTone("manual");
       btn.classList.remove("playing");
-      btn.innerHTML = "▶ PLAY";
     } else {
       if (outHz <= 0 || outHz >= 20000) {
         alert("可聴域（20〜20000Hz）に収まる値を入力してください");
@@ -1621,7 +1753,6 @@
       }
       startTone("manual", outHz);
       btn.classList.add("playing");
-      btn.innerHTML = "■ STOP";
     }
   });
 
