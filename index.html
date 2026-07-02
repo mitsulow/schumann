@@ -318,6 +318,34 @@
     line-height: 1.6;
   }
   .jst-hint em { color: var(--text-muted); font-style: normal; }
+  /* 日本時刻ルーラー (画像の下に JST 目盛りを重ねる) */
+  .jst-graph { display: inline-block; max-width: 100%; position: relative; }
+  .jst-graph img { margin: 0 auto; }
+  .jst-ruler {
+    position: relative; width: 100%; height: 36px; margin-top: 2px;
+    font-family: "JetBrains Mono", monospace; user-select: none;
+  }
+  .jst-tick {
+    position: absolute; top: 0; transform: translateX(-50%);
+    font-size: 0.6rem; color: #7cf9d4; text-align: center; line-height: 1.1;
+  }
+  .jst-tick::before {
+    content: ''; display: block; width: 1px; height: 5px;
+    background: rgba(124, 249, 212, 0.7); margin: 0 auto 1px;
+  }
+  .jst-date {
+    position: absolute; top: 20px; transform: translateX(-50%);
+    font-size: 0.6rem; color: var(--accent-gold); font-weight: 700;
+    white-space: nowrap;
+  }
+  .jst-now {
+    position: absolute; top: 14px; transform: translateX(-50%);
+    font-size: 0.58rem; color: #ff8fb1; font-weight: 700; white-space: nowrap;
+  }
+  .jst-tag {
+    position: absolute; left: 0; top: 0;
+    font-size: 0.55rem; color: var(--text-muted); letter-spacing: 0.1em;
+  }
   .graph-description { padding: 2rem; }
   .graph-description h3 {
     font-family: "Cormorant Garamond", serif;
@@ -444,10 +472,13 @@
 
     <article class="graph-card">
       <div class="graph-image-wrap">
-        <img src="https://mitsulow.github.io/0Lei/latest_spectrogram.jpg" alt="スペクトログラム" onerror="this.src='https://sos70.ru/provider.php?file=shm.jpg'">
+        <div class="jst-graph" data-metrics="shm">
+          <img src="https://mitsulow.github.io/0Lei/latest_spectrogram.jpg" alt="スペクトログラム" onerror="this.src='https://sos70.ru/provider.php?file=shm.jpg'">
+          <div class="jst-ruler"></div>
+        </div>
         <div class="jst-hint">
-          ⏰ <em>グラフの時刻（UTC）+ 9時間 = 日本時間（JST）</em><br>
-          UTC 0時 → JST 9時 / UTC 12時 → JST 21時
+          ⏰ <em>下の緑の目盛りが日本時間（JST）</em><br>
+          グラフ内の目盛りはトムスク時間（日本 −2時間）
         </div>
       </div>
       <div class="graph-description">
@@ -464,9 +495,12 @@
 
     <article class="graph-card">
       <div class="graph-image-wrap">
-        <img src="https://mitsulow.github.io/0Lei/latest_linegraph.jpg" alt="周波数グラフ" onerror="this.src='https://sos70.ru/provider.php?file=srf.jpg'">
+        <div class="jst-graph" data-metrics="line">
+          <img src="https://mitsulow.github.io/0Lei/latest_linegraph.jpg" alt="周波数グラフ" onerror="this.src='https://sos70.ru/provider.php?file=srf.jpg'">
+          <div class="jst-ruler"></div>
+        </div>
         <div class="jst-hint">
-          ⏰ <em>グラフの時刻（UTC）+ 9時間 = 日本時間（JST）</em><br>
+          ⏰ <em>下の緑の目盛りが日本時間（JST）</em><br>
           このグラフが数値読み取りのメインソース
         </div>
       </div>
@@ -484,10 +518,13 @@
 
     <article class="graph-card">
       <div class="graph-image-wrap">
-        <img src="https://sos70.ru/provider.php?file=sra.jpg" alt="振幅グラフ">
+        <div class="jst-graph" data-metrics="line">
+          <img src="https://sos70.ru/provider.php?file=sra.jpg" alt="振幅グラフ">
+          <div class="jst-ruler"></div>
+        </div>
         <div class="jst-hint">
-          ⏰ <em>グラフの時刻（UTC）+ 9時間 = 日本時間（JST）</em><br>
-          UTC 8時ピーク → JST 17時 / UTC 15時ピーク → 翌JST 0時
+          ⏰ <em>下の緑の目盛りが日本時間（JST）</em><br>
+          3大雷活動ピーク: 東南アジア→JST17時 / アフリカ→JST24時 / 南米→翌JST6時 ごろ
         </div>
       </div>
       <div class="graph-description">
@@ -504,9 +541,12 @@
 
     <article class="graph-card">
       <div class="graph-image-wrap">
-        <img src="https://sos70.ru/provider.php?file=srq.jpg" alt="Q値グラフ">
+        <div class="jst-graph" data-metrics="line">
+          <img src="https://sos70.ru/provider.php?file=srq.jpg" alt="Q値グラフ">
+          <div class="jst-ruler"></div>
+        </div>
         <div class="jst-hint">
-          ⏰ <em>グラフの時刻（UTC）+ 9時間 = 日本時間（JST）</em>
+          ⏰ <em>下の緑の目盛りが日本時間（JST）</em>
         </div>
       </div>
       <div class="graph-description">
@@ -783,6 +823,75 @@
   updateManualDisplay();
   loadData();
   setInterval(loadData, 5 * 60 * 1000);
+
+  // ============ 日本時刻ルーラー ============
+  // トムスクのグラフ画像の下に JST 目盛りを重ねる。
+  // 画像の時刻軸はトムスク地方時 (UTC+7) = 日本 (UTC+9) の −2時間。
+  // 画像レイアウト実測値: プロット領域の x 範囲 (3日分 = 72時間)
+  const RULER_METRICS = {
+    line: { w: 1006, x0: 71, x1: 935 },   // srf / sra / srq 共通
+    shm:  { w: 1540, x0: 61, x1: 1503 }   // スペクトログラム
+  };
+
+  function buildJstRulers() {
+    const now = new Date();
+    // グラフ左端 = トムスクの一昨日 00:00 (UTC epoch で)
+    const tomskNow = new Date(now.getTime() + 7 * 3600e3);
+    const day1Utc = Date.UTC(
+      tomskNow.getUTCFullYear(), tomskNow.getUTCMonth(), tomskNow.getUTCDate()
+    ) - 7 * 3600e3 - 2 * 86400e3;
+
+    document.querySelectorAll(".jst-graph").forEach(wrap => {
+      const m = RULER_METRICS[wrap.dataset.metrics];
+      const ruler = wrap.querySelector(".jst-ruler");
+      if (!m || !ruler) return;
+      ruler.innerHTML = "";
+      const pos = g => (m.x0 + g / 72 * (m.x1 - m.x0)) / m.w * 100;
+
+      const tag = document.createElement("div");
+      tag.className = "jst-tag";
+      tag.textContent = "JST →";
+      ruler.appendChild(tag);
+
+      for (let g = 0; g <= 72; g += 2) {
+        const jst = new Date(day1Utc + g * 3600e3 + 9 * 3600e3);
+        const h = jst.getUTCHours();
+        if (g === 0) {
+          // 左端に開始日の日付
+          const d0 = document.createElement("div");
+          d0.className = "jst-date";
+          d0.style.left = pos(0) + "%";
+          d0.textContent = (jst.getUTCMonth() + 1) + "/" + jst.getUTCDate();
+          ruler.appendChild(d0);
+        }
+        if (h % 6 !== 0) continue;
+        const el = document.createElement("div");
+        el.className = "jst-tick";
+        el.style.left = pos(g) + "%";
+        el.textContent = h;
+        ruler.appendChild(el);
+        if (h === 0) {
+          const d = document.createElement("div");
+          d.className = "jst-date";
+          d.style.left = pos(g) + "%";
+          d.textContent = (jst.getUTCMonth() + 1) + "/" + jst.getUTCDate();
+          ruler.appendChild(d);
+        }
+      }
+      // 「今」マーカー
+      const gNow = (now.getTime() - day1Utc) / 3600e3;
+      if (gNow >= 0 && gNow <= 72) {
+        const nowEl = document.createElement("div");
+        nowEl.className = "jst-now";
+        nowEl.style.left = pos(gNow) + "%";
+        nowEl.textContent = "▲今";
+        ruler.appendChild(nowEl);
+      }
+    });
+  }
+
+  buildJstRulers();
+  setInterval(buildJstRulers, 5 * 60 * 1000);
 </script>
 
 </body>
