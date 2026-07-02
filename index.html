@@ -954,6 +954,8 @@
     line-height: 1.9;
     color: var(--text-muted);
   }
+  .subfold .sub-graph { margin: 0.3rem 0; }
+  .subfold p:last-child { padding-top: 0.5rem; font-size: 0.78rem; }
   .mode-graph { width: 100%; height: auto; display: block; padding: 0; }
   /* ===== SRカード (FREQUENCY / AMPLITUDE / QUALITY を実測で) ===== */
   .sr-card {
@@ -1272,6 +1274,24 @@
   </div>
 
   <details class="subfold">
+    <summary>振幅（アンプリチュード）の推移 — pT</summary>
+    <img class="mode-graph sub-graph" src="https://mitsulow.github.io/0Lei/graph_a1.png" alt="第一次モード 振幅">
+    <img class="mode-graph sub-graph" src="https://mitsulow.github.io/0Lei/graph_a2.png" alt="第二次モード 振幅">
+    <img class="mode-graph sub-graph" src="https://mitsulow.github.io/0Lei/graph_a3.png" alt="第三次モード 振幅">
+    <img class="mode-graph sub-graph" src="https://mitsulow.github.io/0Lei/graph_a4.png" alt="第四次モード 振幅">
+    <p>共振の強さ（ピコテスラ）。世界の雷活動の総量がそのまま出ます。上から第一次〜第四次モード。</p>
+  </details>
+
+  <details class="subfold">
+    <summary>Q値の推移 — 共振の鋭さ</summary>
+    <img class="mode-graph sub-graph" src="https://mitsulow.github.io/0Lei/graph_q1.png" alt="第一次モード Q値">
+    <img class="mode-graph sub-graph" src="https://mitsulow.github.io/0Lei/graph_q2.png" alt="第二次モード Q値">
+    <img class="mode-graph sub-graph" src="https://mitsulow.github.io/0Lei/graph_q3.png" alt="第三次モード Q値">
+    <img class="mode-graph sub-graph" src="https://mitsulow.github.io/0Lei/graph_q4.png" alt="第四次モード Q値">
+    <p>共振の「鋭さ」。太陽フレアや地磁気嵐で跳ね上がる、電離層のコンディションの鏡。上から第一次〜第四次モード。</p>
+  </details>
+
+  <details class="subfold">
     <summary>周波数の説明</summary>
     <p>雷などのエネルギーを基に、地球上には無数の電磁波が飛び交っています。その中で、地球を一周して自己共振により強め合う事になった特定の周波数だけが強く残ります。倍音により第1次モードから第7次モードまで観測されています。周波数の上下は主に太陽活動による電離層の高度の上下や、雷の活動の増減です。シューマン共振電磁波は地球固有の「音」と表現されますが、電磁波です。MASTER MIND MEMBERS ではその電磁波を特殊な技術で可聴域に変換し、耳で聴く『シューマン音』を提供しています。</p>
   </details>
@@ -1534,36 +1554,39 @@
         const cv = document.getElementById(id);
         if (!cv) return;
         const ctx = cv.getContext("2d");
-        const W = cv.width, H = cv.height, PAD = 28;
+        const W = cv.width, H = cv.height;
         ctx.clearRect(0, 0, W, H);
         const vals = hist.map(e => e.F1);
         let lo = Math.min(...vals, 7.83), hi = Math.max(...vals, 7.83);
         const m = (hi - lo) * 0.15 + 0.02;
         lo -= m; hi += m;
-        const x = i => PAD + (W - PAD * 2) * i / (hist.length - 1);
+        // 折れ線は左端スタート、最新値が幅の80%位置に来る (右20%は余白 = これから)
+        const x = i => (W * 0.80) * i / (hist.length - 1);
         const y = v => H - 18 - (H - 30) * (v - lo) / (hi - lo);
-        // 基準線 7.83
+        // 基準線 7.83 (裏地いっぱい左右まで)
         ctx.strokeStyle = "rgba(240,198,116,0.5)";
         ctx.setLineDash([5, 5]);
-        ctx.beginPath(); ctx.moveTo(PAD, y(7.83)); ctx.lineTo(W - PAD, y(7.83)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, y(7.83)); ctx.lineTo(W, y(7.83)); ctx.stroke();
         ctx.setLineDash([]);
         ctx.fillStyle = "rgba(240,198,116,0.8)";
         ctx.font = "11px monospace";
-        ctx.fillText("7.83", 2, y(7.83) + 4);
+        ctx.textAlign = "right";
+        ctx.fillText("7.83", W - 6, y(7.83) - 5);
+        ctx.textAlign = "left";
         // F1 ライン
         ctx.strokeStyle = "#7cf9d4";
         ctx.lineWidth = 2;
         ctx.beginPath();
         hist.forEach((e, i) => { i ? ctx.lineTo(x(i), y(e.F1)) : ctx.moveTo(x(i), y(e.F1)); });
         ctx.stroke();
-        // 最新点
+        // 最新点 (80%位置)
         const last = hist[hist.length - 1];
         ctx.fillStyle = "#7cf9d4";
         ctx.beginPath();
         ctx.arc(x(hist.length - 1), y(last.F1), 4, 0, Math.PI * 2);
         ctx.fill();
         ctx.font = "13px monospace";
-        ctx.fillText(last.F1.toFixed(2), Math.min(x(hist.length - 1) + 8, W - 44), y(last.F1) - 8);
+        ctx.fillText(last.F1.toFixed(2), x(hist.length - 1) + 10, y(last.F1) - 8);
       });
     } catch (e) { /* sparkline は飾りなので静かに諦める */ }
   }
