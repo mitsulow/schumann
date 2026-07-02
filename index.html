@@ -497,11 +497,39 @@
   }
   .globe-f1 .gf1-value {
     font-family: "Cinzel", serif;
-    font-size: clamp(2rem, 7.5vw, 3rem);
+    font-size: clamp(2.7rem, 10.5vw, 4.2rem);
     font-weight: 700;
     color: #52fa8c;
     text-shadow: 0 0 16px rgba(82, 250, 140, 0.55), 0 0 44px rgba(82, 250, 140, 0.25);
     line-height: 1;
+  }
+  /* 末尾1桁のスロット回転 (空港の反転フラップ風) */
+  .digit-roll {
+    display: inline-block;
+    overflow: hidden;
+    height: 1em;
+    line-height: 1;
+    vertical-align: baseline;
+    width: 0.72em;
+  }
+  .dr-col { display: block; }
+  .dr-col span { display: block; height: 1em; line-height: 1; }
+  .gf1-live {
+    margin-top: 0.55rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.78rem;
+    color: #7d829a;
+    text-align: center;
+  }
+  .gf1-live b { color: #9fe8c8; font-weight: 700; }
+  .gf1-sep { opacity: 0.5; margin: 0 0.2rem; }
+  /* 再生ボタンはヒーローの右下にひっそり */
+  .hero-inner { position: relative; }
+  .gf1-corner {
+    position: absolute;
+    right: max(0.9rem, 3%);
+    bottom: 0.55rem;
+    z-index: 5;
   }
   .globe-f1 .gf1-unit { margin-left: 0.12em; font-size: 0.7em; }
   /* ▶ の真下から「※…」が始まるよう、行＋注釈をひとかたまりで左揃え */
@@ -927,6 +955,78 @@
     color: var(--text-muted);
   }
   .mode-graph { width: 100%; height: auto; display: block; padding: 0; }
+  /* ===== SRカード (FREQUENCY / AMPLITUDE / QUALITY を実測で) ===== */
+  .sr-card {
+    background: linear-gradient(160deg, #16181f, #0d0f16);
+    border-radius: 14px 14px 0 0;
+    padding: 0.85rem 1rem 0.8rem;
+    border-left: 3px solid var(--sr, #52fa8c);
+  }
+  .sr-card.m1 { --sr: #00ffc8; }
+  .sr-card.m2 { --sr: #ffd60a; }
+  .sr-card.m3 { --sr: #c878ff; }
+  .sr-card.m4 { --sr: #ff3c8c; }
+  .sr-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 0.55rem;
+  }
+  .sr-name {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--sr);
+    letter-spacing: 0.06em;
+  }
+  .sr-base {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.68rem;
+    color: #8a8fa2;
+  }
+  .sr-vals {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+  }
+  .sr-l {
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: #767b8e;
+    margin-bottom: 0.1rem;
+  }
+  .sr-n {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.72rem;
+    color: #9aa0b4;
+  }
+  .sr-n b {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: #f2f4fa;
+    margin-right: 0.1rem;
+  }
+  .sr-bar {
+    margin-top: 0.6rem;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+  .sr-bar i {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #14e0a0, #ffd60a, #ff7a3c);
+    transition: width 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .mode-block .mode-graph { border-radius: 0 0 14px 14px; }
   .freq-note {
     padding: 0.6rem 0.9rem 0.2rem;
   }
@@ -1020,16 +1120,18 @@
       <span class="gf1-label">現在のシューマン共振の値</span>
       <div class="gf1-block">
         <div class="gf1-row">
-          <button id="gf1-play" class="gf1-play" type="button">▶</button>
-          <span class="gf1-value" id="globe-f1-value">—.——</span><span class="gf1-value gf1-unit">Hz</span>
+          <span class="gf1-value"><span id="gf1-main">—.——</span><span class="digit-roll"><span class="dr-col" id="gf1-rollcol" data-d="0"><span>0</span></span></span></span><span class="gf1-value gf1-unit">Hz</span>
         </div>
         <div class="gf1-note" id="gf1-note">※<span id="gf1-aud">—</span>Hzの可聴域に変換した音</div>
+        <div class="gf1-live">振幅 <b id="gf1-amp">—</b> pT <span class="gf1-sep">・</span> Q値 <b id="gf1-q">—</b></div>
       </div>
     </div>
 
     <div class="spark-wrap">
       <canvas id="f1-spark-top" width="900" height="150"></canvas>
     </div>
+
+    <button id="gf1-play" class="gf1-play gf1-corner" type="button" title="今の地球の音を聴く">▶</button>
 
   </div>
 </div>
@@ -1106,37 +1208,65 @@
     <summary>グラフと出典</summary>
 
   <div class="mode-block">
-    <div class="mode-head">
-      <span class="mh-name">① 第一次モード</span>
-      <span class="mh-cur m1" id="mh-cur-F1">—.——Hz</span>
-      <span class="mh-meta">基準値 7.83 ・ <span class="avg-dash">– – –</span> 3日間平均 <span id="mh-avg-F1">—</span></span>
+    <div class="sr-card m1">
+      <div class="sr-top">
+        <span class="sr-name">① 第一次モード</span>
+        <span class="sr-base">基準 7.83 Hz ・ <span class="avg-dash">– – –</span> 3日平均 <span id="mh-avg-F1">—</span></span>
+      </div>
+      <div class="sr-vals">
+        <div class="sr-v"><span class="sr-l">FREQUENCY</span><span class="sr-n"><b id="sr-hz-F1">—</b> Hz</span></div>
+        <div class="sr-v"><span class="sr-l">AMPLITUDE</span><span class="sr-n"><b id="sr-amp-F1">—</b> pT</span></div>
+        <div class="sr-v"><span class="sr-l">QUALITY Q</span><span class="sr-n"><b id="sr-q-F1">—</b></span></div>
+      </div>
+      <div class="sr-bar"><i id="sr-bar-F1"></i></div>
     </div>
     <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f1.png" alt="第一次モード">
   </div>
 
   <div class="mode-block">
-    <div class="mode-head">
-      <span class="mh-name">② 第二次モード</span>
-      <span class="mh-cur m2" id="mh-cur-F2">—.——Hz</span>
-      <span class="mh-meta">基準値 14.1 ・ <span class="avg-dash">– – –</span> 3日間平均 <span id="mh-avg-F2">—</span></span>
+    <div class="sr-card m2">
+      <div class="sr-top">
+        <span class="sr-name">② 第二次モード</span>
+        <span class="sr-base">基準 14.1 Hz ・ <span class="avg-dash">– – –</span> 3日平均 <span id="mh-avg-F2">—</span></span>
+      </div>
+      <div class="sr-vals">
+        <div class="sr-v"><span class="sr-l">FREQUENCY</span><span class="sr-n"><b id="sr-hz-F2">—</b> Hz</span></div>
+        <div class="sr-v"><span class="sr-l">AMPLITUDE</span><span class="sr-n"><b id="sr-amp-F2">—</b> pT</span></div>
+        <div class="sr-v"><span class="sr-l">QUALITY Q</span><span class="sr-n"><b id="sr-q-F2">—</b></span></div>
+      </div>
+      <div class="sr-bar"><i id="sr-bar-F2"></i></div>
     </div>
     <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f2.png" alt="第二次モード">
   </div>
 
   <div class="mode-block">
-    <div class="mode-head">
-      <span class="mh-name">③ 第三次モード</span>
-      <span class="mh-cur m3" id="mh-cur-F3">—.——Hz</span>
-      <span class="mh-meta">基準値 20.3 ・ <span class="avg-dash">– – –</span> 3日間平均 <span id="mh-avg-F3">—</span></span>
+    <div class="sr-card m3">
+      <div class="sr-top">
+        <span class="sr-name">③ 第三次モード</span>
+        <span class="sr-base">基準 20.3 Hz ・ <span class="avg-dash">– – –</span> 3日平均 <span id="mh-avg-F3">—</span></span>
+      </div>
+      <div class="sr-vals">
+        <div class="sr-v"><span class="sr-l">FREQUENCY</span><span class="sr-n"><b id="sr-hz-F3">—</b> Hz</span></div>
+        <div class="sr-v"><span class="sr-l">AMPLITUDE</span><span class="sr-n"><b id="sr-amp-F3">—</b> pT</span></div>
+        <div class="sr-v"><span class="sr-l">QUALITY Q</span><span class="sr-n"><b id="sr-q-F3">—</b></span></div>
+      </div>
+      <div class="sr-bar"><i id="sr-bar-F3"></i></div>
     </div>
     <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f3.png" alt="第三次モード">
   </div>
 
   <div class="mode-block">
-    <div class="mode-head">
-      <span class="mh-name">④ 第四次モード</span>
-      <span class="mh-cur m4" id="mh-cur-F4">—.——Hz</span>
-      <span class="mh-meta">基準値 26.4 ・ <span class="avg-dash">– – –</span> 3日間平均 <span id="mh-avg-F4">—</span></span>
+    <div class="sr-card m4">
+      <div class="sr-top">
+        <span class="sr-name">④ 第四次モード</span>
+        <span class="sr-base">基準 26.4 Hz ・ <span class="avg-dash">– – –</span> 3日平均 <span id="mh-avg-F4">—</span></span>
+      </div>
+      <div class="sr-vals">
+        <div class="sr-v"><span class="sr-l">FREQUENCY</span><span class="sr-n"><b id="sr-hz-F4">—</b> Hz</span></div>
+        <div class="sr-v"><span class="sr-l">AMPLITUDE</span><span class="sr-n"><b id="sr-amp-F4">—</b> pT</span></div>
+        <div class="sr-v"><span class="sr-l">QUALITY Q</span><span class="sr-n"><b id="sr-q-F4">—</b></span></div>
+      </div>
+      <div class="sr-bar"><i id="sr-bar-F4"></i></div>
     </div>
     <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f4.png" alt="第四次モード">
   </div>
@@ -1294,12 +1424,27 @@
     renderF1(data);
     renderModes(data.modes);
     buildPhiPads(data.modes);
-    // グラフ見出しの現在値ピル
+    // SRカード: FREQUENCY / AMPLITUDE / QUALITY / 振幅バー
     ["F1", "F2", "F3", "F4"].forEach(k => {
-      const el = document.getElementById("mh-cur-" + k);
       const m = data.modes && data.modes[k];
-      if (el && m && typeof m.hz === "number") el.textContent = m.hz.toFixed(2) + "Hz";
+      if (!m) return;
+      const set = (id, v, digits) => {
+        const el = document.getElementById(id);
+        if (el && typeof v === "number") el.textContent = v.toFixed(digits);
+      };
+      set("sr-hz-" + k, m.hz, 2);
+      set("sr-amp-" + k, m.amp, 1);
+      set("sr-q-" + k, m.q, 1);
+      const bar = document.getElementById("sr-bar-" + k);
+      if (bar && typeof m.amp === "number") bar.style.width = Math.min(100, m.amp / 12 * 100) + "%";
     });
+    // ヒーローの振幅・Qチップ
+    const f1m = data.modes && data.modes.F1;
+    if (f1m) {
+      const ga = document.getElementById("gf1-amp"), gq = document.getElementById("gf1-q");
+      if (ga && typeof f1m.amp === "number") ga.textContent = f1m.amp.toFixed(1);
+      if (gq && typeof f1m.q === "number") gq.textContent = f1m.q.toFixed(1);
+    }
     // 3日間平均 (graph_stats.json)
     fetch("https://mitsulow.github.io/0Lei/graph_stats.json?t=" + Date.now(), { cache: "no-store" })
       .then(r => r.ok ? r.json() : null)
@@ -1341,9 +1486,9 @@
       big.textContent = "—.——";
       meta.textContent = "F1 データ欠損中 (観測所側)";
     }
-    // 地球儀の下の大きな表示にも反映
-    const gv = document.getElementById("globe-f1-value");
-    if (gv) gv.textContent = hz != null ? hz.toFixed(2) : "—.——";
+    // 地球儀の下の大きな表示にも反映 (末尾1桁はスロット演出)
+    const gm = document.getElementById("gf1-main");
+    if (gm) gm.textContent = hz != null ? hz.toFixed(2) : "—.——";
     // ▶ ボタンの再生周波数も最新値に (鳴らしたままなら滑らかに追従)
     gf1Freq = (hz != null ? hz : 7.83) * 64;
     if (gf1Bowl) retuneBowl(gf1Bowl, gf1Freq);
@@ -1378,6 +1523,12 @@
       }
       const hist = sparkCache.filter(e => e.F1 != null).slice(-96); // 15分×96 = 24h
       if (hist.length < 4) return;
+      // 直近トレンド (上昇/下降局面) — 末尾桁スロットの偏りに使う
+      if (hist.length >= 6) {
+        const recent = hist.slice(-3).reduce((s, e) => s + e.F1, 0) / 3;
+        const before = hist.slice(-6, -3).reduce((s, e) => s + e.F1, 0) / 3;
+        f1Trend = recent > before + 0.004 ? 1 : (recent < before - 0.004 ? -1 : 0);
+      }
       // トップと折りたたみ内、両方のキャンバスに同じグラフを描く
       ["f1-spark", "f1-spark-top"].forEach(id => {
         const cv = document.getElementById(id);
@@ -1886,6 +2037,42 @@
       melodyTick();
     }
   });
+
+  // ===== 末尾1桁のスロット演出 =====
+  // 小数点第3位を、実測トレンド (上昇/下降局面) に偏らせた酔歩で揺らす。
+  // 表示は空港の反転フラップのように上へめくれて切り替わる
+  let f1Trend = 0;
+  let rollVal = 5;
+  function rollDigit(d) {
+    const col = document.getElementById("gf1-rollcol");
+    if (!col) return;
+    const old = col.dataset.d || "0";
+    if (old === String(d)) return;
+    col.innerHTML = "<span>" + old + "</span><span>" + d + "</span>";
+    col.style.transition = "none";
+    col.style.transform = "translateY(0)";
+    requestAnimationFrame(() => {
+      col.style.transition = "transform 0.5s cubic-bezier(0.25, 0.9, 0.3, 1)";
+      col.style.transform = "translateY(-1em)";
+    });
+    col.dataset.d = String(d);
+    setTimeout(() => {
+      col.style.transition = "none";
+      col.innerHTML = "<span>" + d + "</span>";
+      col.style.transform = "translateY(0)";
+    }, 540);
+  }
+  function tickRoll() {
+    const steps = f1Trend > 0 ? [0, 1, 1, 1, 2, -1]
+                : f1Trend < 0 ? [0, -1, -1, -1, -2, 1]
+                : [-1, 0, 0, 0, 1];
+    rollVal += steps[Math.floor(Math.random() * steps.length)];
+    if (rollVal > 9) rollVal = 8;
+    if (rollVal < 0) rollVal = 1;
+    rollDigit(rollVal);
+    setTimeout(tickRoll, 1700 + Math.random() * 2300);
+  }
+  setTimeout(tickRoll, 2600);
 
   // ===== トップの ▶ ボタン: 今の F1 を可聴域 (6オクターブ上 = ×64) で鳴らす =====
   let gf1Bowl = null;
