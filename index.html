@@ -746,7 +746,55 @@
   details.fold > section, details.fold > .graph-section, details.fold > h2 { margin-top: 1rem; }
   details.fold > :last-child:not(summary) { margin-bottom: 1rem; }
   .graph-description { padding: 0.9rem 1.2rem 0.6rem; }
-  .mode-graph { width: 100%; height: auto; display: block; padding: 0.5rem 0.5rem 0; }
+  /* モードブロック: 見出し(HTML) + フル幅グラフ */
+  .mode-block { margin-bottom: 1.15rem; }
+  .mode-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0 0.9rem 0.4rem;
+  }
+  .mh-name {
+    font-family: "Noto Serif JP", serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .mh-cur {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #14161e;
+    padding: 0.18rem 0.7rem;
+    border-radius: 100px;
+  }
+  .mh-cur.m1 { background: #00ffc8; }
+  .mh-cur.m2 { background: #ffd60a; }
+  .mh-cur.m3 { background: #c878ff; }
+  .mh-cur.m4 { background: #ff3c8c; color: #fff; }
+  .mh-meta {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    font-family: "JetBrains Mono", monospace;
+  }
+  .mode-graph { width: 100%; height: auto; display: block; padding: 0; }
+  .freq-note {
+    padding: 0.6rem 0.9rem 0.2rem;
+  }
+  .freq-note h4 {
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.98rem;
+    color: var(--accent-gold);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.06em;
+  }
+  .freq-note p {
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.88rem;
+    line-height: 1.9;
+    color: var(--text-muted);
+  }
   .graph-head { padding: 0.9rem 1.2rem 0.5rem; }
   .graph-head h3 {
     font-family: "Cormorant Garamond", serif;
@@ -908,31 +956,45 @@
   <details class="fold" id="fold-graphs">
     <summary>グラフと出典</summary>
 
-  <div class="graph-section">
-
-    <article class="graph-card">
-      <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f1.png" alt="第一次モード">
-    </article>
-
-    <article class="graph-card">
-      <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f2.png" alt="第二次モード">
-    </article>
-
-    <article class="graph-card">
-      <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f3.png" alt="第三次モード">
-    </article>
-
-    <article class="graph-card">
-      <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f4.png" alt="第四次モード">
-    </article>
-
+  <div class="mode-block">
+    <div class="mode-head">
+      <span class="mh-name">① 第一次モード</span>
+      <span class="mh-cur m1" id="mh-cur-F1">—.——Hz</span>
+      <span class="mh-meta">基準値 7.83 ・ 3日間平均 <span id="mh-avg-F1">—</span></span>
+    </div>
+    <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f1.png" alt="第一次モード">
   </div>
 
-  <div class="graph-card">
-    <div class="graph-description">
-      <p>基準値は F1: 7.83 / F2: 14.1 / F3: 20.3 / F4: 26.4 Hz。周波数を動かすのは主に電離層の高さ — 太陽の活動で電離層がふくらんだり縮んだりすると、「地球という楽器」のサイズが変わって音程が動きます。</p>
-      <p>時刻は日本時間、15分ごとに自動更新。過去2日＋今日のローリング表示で、右端が「今」です。欠けている区間は観測所側のデータ欠損（埋めずに正直に表示しています）。</p>
+  <div class="mode-block">
+    <div class="mode-head">
+      <span class="mh-name">② 第二次モード</span>
+      <span class="mh-cur m2" id="mh-cur-F2">—.——Hz</span>
+      <span class="mh-meta">基準値 14.1 ・ 3日間平均 <span id="mh-avg-F2">—</span></span>
     </div>
+    <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f2.png" alt="第二次モード">
+  </div>
+
+  <div class="mode-block">
+    <div class="mode-head">
+      <span class="mh-name">③ 第三次モード</span>
+      <span class="mh-cur m3" id="mh-cur-F3">—.——Hz</span>
+      <span class="mh-meta">基準値 20.3 ・ 3日間平均 <span id="mh-avg-F3">—</span></span>
+    </div>
+    <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f3.png" alt="第三次モード">
+  </div>
+
+  <div class="mode-block">
+    <div class="mode-head">
+      <span class="mh-name">④ 第四次モード</span>
+      <span class="mh-cur m4" id="mh-cur-F4">—.——Hz</span>
+      <span class="mh-meta">基準値 26.4 ・ 3日間平均 <span id="mh-avg-F4">—</span></span>
+    </div>
+    <img class="mode-graph" src="https://mitsulow.github.io/0Lei/graph_f4.png" alt="第四次モード">
+  </div>
+
+  <div class="freq-note">
+    <h4>周波数の説明</h4>
+    <p>雷などのエネルギーを基に、地球上には無数の電磁波が飛び交っています。その中で、地球を一周して自己共振により強め合う事になった特定の周波数だけが強く残ります。倍音により第1次モードから第7次モードまで観測されています。周波数の上下は主に太陽活動による電離層の高度の上下や、雷の活動の増減です。シューマン共振電磁波は地球固有の「音」と表現されますが、電磁波です。MASTER MIND MEMBERS ではその電磁波を特殊な技術で可聴域に変換し、耳で聴く『シューマン音』を提供しています。</p>
   </div>
 
   <p class="src-line">出典データ: トムスク国立大学の公開データを基にグラフを作成。詳細は大学のHPをご確認ください
@@ -1083,6 +1145,23 @@
     renderF1(data);
     renderModes(data.modes);
     buildPhiPads(data.modes);
+    // グラフ見出しの現在値ピル
+    ["F1", "F2", "F3", "F4"].forEach(k => {
+      const el = document.getElementById("mh-cur-" + k);
+      const m = data.modes && data.modes[k];
+      if (el && m && typeof m.hz === "number") el.textContent = m.hz.toFixed(2) + "Hz";
+    });
+    // 3日間平均 (graph_stats.json)
+    fetch("https://mitsulow.github.io/0Lei/graph_stats.json?t=" + Date.now(), { cache: "no-store" })
+      .then(r => r.ok ? r.json() : null)
+      .then(s => {
+        if (!s || !s.modes) return;
+        ["F1", "F2", "F3", "F4"].forEach(k => {
+          const a = document.getElementById("mh-avg-" + k);
+          if (a && s.modes[k] && typeof s.modes[k].avg === "number")
+            a.textContent = s.modes[k].avg.toFixed(2);
+        });
+      }).catch(() => {});
     if (data.polarization) renderPolarization(data.polarization);
     if (data.notes) {
       document.getElementById("observation").style.display = "block";
