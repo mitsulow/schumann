@@ -52,7 +52,40 @@
     background-size: 60px 60px;
     pointer-events: none; z-index: 0;
   }
-  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0.6rem 1.5rem 6rem;
+  /* ★ 黒バンド (ロゴ〜地球儀〜鼠色グラフ): ここだけ宇宙 */
+  .hero-dark {
+    background: linear-gradient(180deg, #03050c 0%, #05070f 60%, #070a14 100%);
+    padding: 0.7rem 0 1.6rem;
+  }
+  .hero-inner { max-width: 1200px; margin: 0 auto; }
+  .hero-dark .last-update { color: #6d7288; }
+  .hero-dark .mmm-logo .mmm-text {
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    color: #52fa8c;
+    text-shadow: 0 0 14px rgba(82, 250, 140, 0.55), 0 0 40px rgba(82, 250, 140, 0.25);
+    filter: none;
+  }
+  .hero-dark .mmm-logo .bolt { filter: drop-shadow(0 0 6px rgba(82, 250, 140, 0.6)); }
+  .hero-dark .globe-f1 .gf1-label { color: #7d829a; }
+  .hero-dark .globe-f1 .gf1-value {
+    color: #7cf9d4;
+    text-shadow: 0 0 26px rgba(124, 249, 212, 0.45);
+  }
+  .hero-dark .gf1-play {
+    border-color: rgba(124, 249, 212, 0.55);
+    background: radial-gradient(circle at 36% 32%, #123630, #0a1f1c 65%, #061412);
+    color: #7cf9d4;
+    box-shadow: 0 0 16px rgba(124, 249, 212, 0.25);
+  }
+  .hero-dark .gf1-play.on {
+    background: radial-gradient(circle at 36% 32%, #1e6a58, #124436 65%, #0a2a22);
+    color: #b8ffe8;
+    box-shadow: 0 0 26px rgba(124, 249, 212, 0.6);
+  }
+  .hero-dark #f1-spark-top { background: #42464f; } /* 鼠色 */
+  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem 6rem;
     display: flex; flex-direction: column; }
   .wrap > * { width: 100%; }
   /* 表示順: グラフと出典 (source順のまま=0) → 音とシューマン電磁波 → 磁場の回転 → footer */
@@ -396,12 +429,13 @@
     font-family: "JetBrains Mono", monospace; user-select: none; line-height: 1;
   }
   .jst-below .jb-date {
-    position: absolute; top: 0.15rem; transform: translateX(-50%);
-    font-size: 0.85rem; color: var(--accent-gold); font-weight: 700; white-space: nowrap;
+    position: absolute; top: 0.2rem; transform: translateX(-50%);
+    font-size: 0.66rem; color: var(--accent-gold); font-weight: 700; white-space: nowrap;
   }
   .jst-below .jb-now {
-    position: absolute; top: 0.1rem; transform: translateX(-50%);
-    font-size: 0.85rem; color: #c84470; font-weight: 700; white-space: nowrap;
+    position: absolute; top: 0; transform: translateX(-50%);
+    font-size: 0.7rem; color: #c84470; font-weight: 700; white-space: nowrap;
+    text-align: center; line-height: 1.05;
   }
   /* ★ 地球儀 (トップ): 枠なし。黒い宇宙が楕円ににじんで白いページへ拡がる */
   .globe-wrap {
@@ -624,6 +658,32 @@
     box-shadow: 0 4px 10px rgba(30, 15, 5, 0.4);
   }
   .phi-note { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.9rem; }
+  .phi-auto-row { text-align: center; margin: 0.2rem 0 0.4rem; }
+  .phi-auto {
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.65rem 1.6rem;
+    border-radius: 100px;
+    border: 1.5px solid rgba(163, 124, 34, 0.5);
+    background: linear-gradient(160deg, #f7e6ba, #e2bc6a);
+    color: #4a3408;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(160, 120, 30, 0.3);
+    transition: transform 0.12s, box-shadow 0.5s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .phi-auto:active { transform: scale(0.96); }
+  .phi-auto.on {
+    background: linear-gradient(160deg, #ffe9b0, #f0c455);
+    box-shadow: 0 0 26px rgba(200, 150, 40, 0.6);
+    animation: autoGlow 3s ease-in-out infinite;
+  }
+  @keyframes autoGlow {
+    0%, 100% { box-shadow: 0 0 18px rgba(200, 150, 40, 0.45); }
+    50% { box-shadow: 0 0 34px rgba(200, 150, 40, 0.75); }
+  }
   /* ★ 折りたたみセクション */
   details.fold {
     background: rgba(255, 255, 255, 0.72);
@@ -719,29 +779,36 @@
 </head>
 <body>
 
-<div class="wrap">
+<!-- ★★ 黒バンド: ロゴ〜地球儀〜今の値〜鼠色グラフまでは宇宙の中 ★★ -->
+<div class="hero-dark">
+  <div class="hero-inner">
 
-  <header>
-    <div class="mmm-logo"><span class="bolt">⚡</span><span class="mmm-text">MASTER MIND MEMBERS</span><span class="bolt">⚡</span></div>
-    <div class="last-update">
-      <span class="live-dot"></span>
-      <span id="last-update">Loading...</span>
+    <header>
+      <div class="mmm-logo"><span class="bolt">⚡</span><span class="mmm-text">MASTER MIND MEMBERS</span><span class="bolt">⚡</span></div>
+      <div class="last-update">
+        <span class="live-dot"></span>
+        <span id="last-update">Loading...</span>
+      </div>
+    </header>
+
+    <!-- 地球儀: 世界の雷がリアルタイムで光る (セクション分けなし、黒に直置き) -->
+    <section class="globe-wrap">
+      <iframe src="./globe.html" title="地球儀 — 世界の雷とシューマン共振" allow="gyroscope"></iframe>
+    </section>
+
+    <div class="globe-f1">
+      <span class="gf1-label">今のシューマン共振</span>
+      <div class="gf1-row">
+        <button id="gf1-play" class="gf1-play" type="button">▶</button>
+        <span class="gf1-value" id="globe-f1-value">—.——</span><span class="gf1-value gf1-unit">Hz</span>
+      </div>
+      <canvas id="f1-spark-top" width="900" height="150"></canvas>
     </div>
-  </header>
 
-  <!-- ★★ 地球儀: 世界の雷がリアルタイムで光る (このサイトの顔) ★★ -->
-  <section class="globe-wrap">
-    <iframe src="./globe.html" title="地球儀 — 世界の雷とシューマン共振" allow="gyroscope"></iframe>
-  </section>
-
-  <div class="globe-f1">
-    <span class="gf1-label">今のシューマン共振</span>
-    <div class="gf1-row">
-      <button id="gf1-play" class="gf1-play" type="button">▶</button>
-      <span class="gf1-value" id="globe-f1-value">—.——</span><span class="gf1-value gf1-unit">Hz</span>
-    </div>
-    <canvas id="f1-spark-top" width="900" height="150"></canvas>
   </div>
+</div>
+
+<div class="wrap">
 
   <div class="error-banner" id="error-banner">データ取得中にエラーが発生しました。</div>
 
@@ -796,6 +863,9 @@
       黄金比 φ = <b>1.61803399</b>。いまのシューマン共振の周波数に φ を何度もかけて、
       耳に聞こえる高さまで持ち上げた鈴の音です。それぞれの鈴の φ の回数は下の −＋ で変えられます。
     </p>
+    <div class="phi-auto-row">
+      <button id="phi-auto" class="phi-auto" type="button">♪ おまかせ演奏 — 地球のメロディ</button>
+    </div>
     <div class="phi-stage">
       <div class="phi-pads" id="phi-pads"></div>
       <div class="phi-base"></div>
@@ -1323,6 +1393,85 @@
   }
   buildPhiPads(null);
 
+  // ===== ♪ おまかせ演奏 — 地球のメロディ =====
+  // いまの Schumann 4音 (F1-F4) × φ のべき乗でできる「黄金比の音の池」を、
+  // ゆっくりした酔歩でたどる。リズムも 1 : 1/φ : φ の黄金比。
+  // 時々 φ³ 上の音が重なって、割り切れない和音が生まれる。
+  let melodyTimer = null;
+  let melodyStep = 0;
+  let melodyIdx = -1;
+
+  function melodyPool() {
+    const pool = [];
+    ["F1", "F2", "F3", "F4"].forEach(key => {
+      const hz = phiHzOf(key);
+      for (let k = 4; k <= 11; k++) {
+        const v = hz * Math.pow(PHI, k);
+        if (v >= 140 && v <= 1250) pool.push({ key, v });
+      }
+    });
+    return pool.sort((a, b) => a.v - b.v);
+  }
+
+  // 一打ちの鐘: 立ち上がり一瞬 → ゆっくり減衰する正弦波
+  function strike(freq, gain, dur) {
+    const ctx = getAudioCtx();
+    const o = ctx.createOscillator(); o.type = "sine"; o.frequency.value = freq;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.linearRampToValueAtTime(gain, ctx.currentTime + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + dur + 0.1);
+  }
+
+  function flashRin(key) {
+    const st = phiState[key];
+    if (!st) return;
+    st.pad.classList.add("on");
+    if (!st.bowl) setTimeout(() => { if (!st.bowl) st.pad.classList.remove("on"); }, 750);
+  }
+
+  const MELODY_RHYTHM = [1, 1, 0.618, 1.618, 1, 0.618, 1.618, 1]; // 黄金比の拍
+  function melodyTick() {
+    const pool = melodyPool();
+    if (!pool.length) { melodyTimer = setTimeout(melodyTick, 1500); return; }
+    if (melodyIdx < 0) melodyIdx = Math.floor(pool.length / 2);
+    // 酔歩: 池の中を -2〜+2 で漂う (端に来たら内側へ)
+    melodyIdx += [-2, -1, -1, 0, 1, 1, 2][Math.floor(Math.random() * 7)];
+    melodyIdx = Math.max(0, Math.min(pool.length - 1, melodyIdx));
+    const n = pool[melodyIdx];
+    strike(n.v, 0.13, 3.4);
+    flashRin(n.key);
+    // 3割の確率で φ³ 上あたりの音を淡く重ねる (神秘の和音)
+    if (Math.random() < 0.3) {
+      const j = Math.min(pool.length - 1, melodyIdx + 3 + Math.floor(Math.random() * 2));
+      if (j !== melodyIdx) { strike(pool[j].v, 0.07, 4.2); flashRin(pool[j].key); }
+    }
+    // ごくたまに低い地鳴りの一打
+    if (Math.random() < 0.12 && melodyIdx > 2) {
+      strike(pool[0].v, 0.09, 5.0); flashRin(pool[0].key);
+    }
+    const beat = 1.35 * MELODY_RHYTHM[melodyStep % MELODY_RHYTHM.length];
+    melodyStep++;
+    melodyTimer = setTimeout(melodyTick, beat * 1000);
+  }
+
+  const autoBtn = document.getElementById("phi-auto");
+  if (autoBtn) autoBtn.addEventListener("click", () => {
+    if (melodyTimer) {
+      clearTimeout(melodyTimer); melodyTimer = null;
+      autoBtn.classList.remove("on");
+      autoBtn.textContent = "♪ おまかせ演奏 — 地球のメロディ";
+    } else {
+      getAudioCtx(); // ユーザー操作でオーディオ解錠
+      melodyStep = 0; melodyIdx = -1;
+      autoBtn.classList.add("on");
+      autoBtn.textContent = "■ 演奏をやめる";
+      melodyTick();
+    }
+  });
+
   // ===== トップの ▶ ボタン: 今の F1 を可聴域 (6オクターブ上 = ×64) で鳴らす =====
   let gf1Bowl = null;
   let gf1Freq = 7.83 * 64;
@@ -1475,13 +1624,13 @@
         el.textContent = h;
         cover.appendChild(el);
       }
-      // 「今」マーカー (画像の下・大きめ)
+      // 「今」マーカー (▲の先端が正確に現在位置に来るよう縦積み)
       const gNow = (now.getTime() - day1Utc) / 3600e3;
       if (gNow >= 0 && gNow <= 72) {
         const nowEl = document.createElement("div");
         nowEl.className = "jb-now";
         nowEl.style.left = pos(gNow) + "%";
-        nowEl.textContent = "▲今";
+        nowEl.innerHTML = "▲<br>今";
         below.appendChild(nowEl);
       }
     });

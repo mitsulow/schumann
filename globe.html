@@ -6,23 +6,14 @@
 <title>オトヒカリ — 光の音柱</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  /* 背景は透明: 親ページ (白) に、黒い宇宙が滲んで溶け込む */
+  /* 背景は透明: 親ページの黒バンドに直接浮かぶ */
   html,body{color:#e0e8f0;overflow:hidden;height:100%;width:100%;-webkit-user-select:none;user-select:none;background:transparent}
-  #bgGlow{position:fixed;inset:0;z-index:0;pointer-events:none;
-    background:
-      radial-gradient(ellipse 72% 62% at 50% 48%, rgba(8,16,48,0.5) 0%, rgba(8,16,48,0.2) 60%, transparent 82%),
-      radial-gradient(ellipse 54% 46% at 50% 50%,
-        #081030 0%, #081030 52%,
-        rgba(8,16,48,0.7) 66%,
-        rgba(8,16,48,0.3) 78%,
-        transparent 94%)}
   /* 縦スワイプは親ページのスクロールに渡す (pan-y)。横ドラッグとピンチだけ地球儀が使う */
   #c{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;touch-action:pan-y}
   canvas{display:block;touch-action:pan-y}
 </style>
 </head>
 <body>
-<div id="bgGlow"></div>
 <div id="c"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
