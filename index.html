@@ -2071,12 +2071,18 @@
     if (!col) return;
     const old = col.dataset.d || "0";
     if (old === String(d)) return;
-    col.innerHTML = "<span>" + old + "</span><span>" + d + "</span>";
+    const up = Number(d) > Number(old); // 増加 → 上へめくれ / 減少 → 下へめくれ
     col.style.transition = "none";
-    col.style.transform = "translateY(0)";
+    if (up) {
+      col.innerHTML = "<span>" + old + "</span><span>" + d + "</span>";
+      col.style.transform = "translateY(0)";
+    } else {
+      col.innerHTML = "<span>" + d + "</span><span>" + old + "</span>";
+      col.style.transform = "translateY(-1em)";
+    }
     requestAnimationFrame(() => {
       col.style.transition = "transform 0.5s cubic-bezier(0.25, 0.9, 0.3, 1)";
-      col.style.transform = "translateY(-1em)";
+      col.style.transform = up ? "translateY(-1em)" : "translateY(0)";
     });
     col.dataset.d = String(d);
     setTimeout(() => {
