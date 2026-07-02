@@ -600,88 +600,43 @@
     min-width: 2.4em;
     text-align: center;
   }
-  /* おりんの舞台: 漆の台の上に大きさの違う4つの鈴 */
-  .phi-stage {
+  /* 音の球たちが浮かぶ夜空パネル */
+  .phi-sky {
     position: relative;
-    padding: 1.6rem 2% 0;
+    height: clamp(300px, 62vw, 430px);
     margin-top: 0.4rem;
+    border-radius: 16px;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(60, 80, 160, 0.25), transparent 55%),
+      radial-gradient(ellipse at 75% 80%, rgba(120, 60, 160, 0.18), transparent 55%),
+      linear-gradient(160deg, #14161f, #0c0e16);
+    overflow: hidden;
   }
-  .phi-pads {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 3.5%;
-  }
-  .phi-rin { display: flex; flex-direction: column; align-items: center; position: relative; }
-  /* 鈴のサイズ: 一次が最大 → 四次が最小 (低い音ほど大きな鈴) */
-  .phi-rin[data-mode="F1"] { width: 27%; }
-  .phi-rin[data-mode="F2"] { width: 24%; }
-  .phi-rin[data-mode="F3"] { width: 21%; }
-  .phi-rin[data-mode="F4"] { width: 18.5%; }
-  .phi-pad {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1;
+  .phi-ball {
+    position: absolute;
     border-radius: 50%;
     border: none;
+    padding: 0;
     cursor: pointer;
-    /* 真鍮のおりん */
-    background:
-      radial-gradient(circle at 33% 28%, rgba(255, 248, 225, 0.95) 0%, rgba(255, 240, 200, 0.35) 18%, transparent 40%),
-      repeating-radial-gradient(circle at 50% 50%, transparent 0 9%, rgba(90, 60, 10, 0.08) 9.5% 10.5%, transparent 11% 20%),
-      radial-gradient(circle at 42% 36%, #f2d896 0%, #d9ae5f 40%, #a8802e 72%, #6e4d14 100%);
-    box-shadow:
-      inset 0 -8px 16px rgba(70, 45, 0, 0.45),
-      inset 0 6px 10px rgba(255, 244, 210, 0.55),
-      0 8px 18px rgba(70, 50, 10, 0.35);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1px;
-    font-family: "Noto Serif JP", serif;
-    color: #4a3408;
-    transition: transform 0.12s, filter 0.5s;
+    transform: translate(-50%, -50%);
+    transition: transform 0.16s ease-out;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    z-index: 1;
+    animation: ballBob ease-in-out infinite alternate;
   }
-  .phi-pad:active { transform: scale(0.955); }
-  .phi-pad .pp-name { font-size: clamp(0.7rem, 2.4vw, 1.05rem); font-weight: 700; letter-spacing: 0.08em; text-shadow: 0 1px 0 rgba(255,240,200,0.6); }
-  .phi-pad .pp-out { font-family: "JetBrains Mono", monospace; font-size: clamp(0.55rem, 1.8vw, 0.75rem); color: #6e4e10; }
-  .phi-pad .pp-src { font-family: "JetBrains Mono", monospace; font-size: clamp(0.48rem, 1.5vw, 0.62rem); color: rgba(90, 65, 15, 0.75); }
-  /* 鳴っている鈴: 金色に輝き、波紋が広がり続ける */
-  .phi-pad.on { filter: brightness(1.14) saturate(1.15); }
-  .phi-pad.on::before, .phi-pad.on::after {
-    content: "";
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    border: 2px solid rgba(190, 140, 40, 0.6);
-    animation: rinRipple 2.8s ease-out infinite;
-    pointer-events: none;
+  @keyframes ballBob {
+    from { margin-top: -7px; margin-left: -4px; }
+    to { margin-top: 7px; margin-left: 4px; }
   }
-  .phi-pad.on::after { animation-delay: 1.4s; }
-  @keyframes rinRipple {
-    0% { transform: scale(1); opacity: 0.75; }
-    100% { transform: scale(1.65); opacity: 0; }
-  }
-  /* 座布団 (緋色) と漆の台 */
-  .phi-cushion {
-    width: 88%;
-    height: clamp(8px, 2.2vw, 14px);
-    margin-top: -4px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse at 50% 35%, #c8404a 0%, #90202e 60%, #6a1420 100%);
-    box-shadow: 0 3px 7px rgba(60, 10, 15, 0.45);
-  }
-  .phi-base {
-    height: 14px;
-    margin: -5px 1% 0;
-    border-radius: 7px;
-    background: linear-gradient(180deg, #3a2418 0%, #241209 55%, #170a04 100%);
-    box-shadow: 0 4px 10px rgba(30, 15, 5, 0.4);
-  }
+  .phi-ball.m1 { background: radial-gradient(circle at 33% 30%, #eafffa, #00ffc8 45%, #007a5e); box-shadow: 0 0 18px rgba(0, 255, 200, 0.45); }
+  .phi-ball.m2 { background: radial-gradient(circle at 33% 30%, #fff8dc, #ffd60a 45%, #8a7000); box-shadow: 0 0 18px rgba(255, 214, 10, 0.45); }
+  .phi-ball.m3 { background: radial-gradient(circle at 33% 30%, #f4e8ff, #c878ff 45%, #5e2a8a); box-shadow: 0 0 18px rgba(200, 120, 255, 0.45); }
+  .phi-ball.m4 { background: radial-gradient(circle at 33% 30%, #ffe0ec, #ff3c8c 45%, #7e1040); box-shadow: 0 0 18px rgba(255, 60, 140, 0.45); }
+  .phi-ball.hit { transform: translate(-50%, -50%) scale(1.28); }
+  .phi-ball.hit.m1 { box-shadow: 0 0 42px rgba(0, 255, 200, 0.95); }
+  .phi-ball.hit.m2 { box-shadow: 0 0 42px rgba(255, 214, 10, 0.95); }
+  .phi-ball.hit.m3 { box-shadow: 0 0 42px rgba(200, 120, 255, 0.95); }
+  .phi-ball.hit.m4 { box-shadow: 0 0 42px rgba(255, 60, 140, 0.95); }
   .phi-note { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.9rem; }
   .phi-auto-row { text-align: center; margin: 0.2rem 0 0.4rem; }
   .phi-auto {
@@ -980,17 +935,14 @@
 
   <div class="phi-wrap">
     <p class="phi-explain">
-      黄金比 φ = <b>1.61803399</b>。いまのシューマン共振の周波数に φ を何度もかけて、
-      耳に聞こえる高さまで持ち上げた鈴の音です。それぞれの鈴の φ の回数は下の −＋ で変えられます。
+      いまのシューマン共振 4音 × 黄金比 φ = <b>1.61803399</b> のべき乗でできた音の球たち。
+      色はグラフの4モードに対応しています。触れると鳴ります。
     </p>
     <div class="phi-auto-row">
-      <button id="phi-auto" class="phi-auto" type="button">♪ おまかせ演奏 — 地球のメロディ</button>
+      <button id="phi-auto" class="phi-auto" type="button">♪ AI メロディ</button>
     </div>
-    <div class="phi-stage">
-      <div class="phi-pads" id="phi-pads"></div>
-      <div class="phi-base"></div>
-    </div>
-    <p class="phi-note">鈴に触れると鳴り、もう一度触れると鎮まります ・ 重ねて鳴らせます<br>※ スマホは消音モードだと鳴らないことがあります</p>
+    <div class="phi-sky" id="phi-sky"></div>
+    <p class="phi-note">大きな球ほど低い音 ・ 重ねて鳴らせます ※ スマホは消音モードだと鳴らないことがあります</p>
   </div>
 
   </details>
@@ -1381,15 +1333,8 @@
   // ===== 黄金比の音 (シンギングアース) =====
   // シューマン共振の実測値に黄金比 φ をかけ続けて可聴域へ。音は素直な正弦波。
   const PHI = 1.61803399; // 黄金比 (1+√5)/2 = 1.6180339887… → 小数点第8位
-  const PHI_NAMES = { F1: "第一次", F2: "第二次", F3: "第三次", F4: "第四次" };
-  const phiState = {};
-
-  function phiAutoK(f) {
-    let k = 0, v = f;
-    while (v < 220) { v *= PHI; k++; }
-    if (v > 1500) { k--; }
-    return k;
-  }
+  const PHI_MODE_CLS = { F1: "m1", F2: "m2", F3: "m3", F4: "m4" };
+  const PHI_THEORY = { F1: 7.83, F2: 14.1, F3: 20.3, F4: 26.4 };
 
   // 素直な正弦波。クリックノイズ防止に短いフェードだけ付ける
   function startBowl(freq) {
@@ -1423,87 +1368,67 @@
     return m && typeof m.hz === "number" ? m.hz : MODE_INFO[key].theory;
   }
 
-  function phiRefresh(key) {
-    const st = phiState[key];
-    if (!st) return;
-    const hz = phiHzOf(key);
-    st.freq = hz * Math.pow(PHI, st.k);
-    if (st.bowl) retuneBowl(st.bowl, st.freq);
-    st.pad.innerHTML =
-      '<span class="pp-name">' + PHI_NAMES[key] + '</span>' +
-      '<span class="pp-src">' + hz.toFixed(2) + 'Hz×φ<sup>' + st.k + '</sup></span>' +
-      '<span class="pp-out">' + (st.freq >= 1000 ? Math.round(st.freq) : st.freq.toFixed(1)) + 'Hz</span>';
-    st.stepVal.textContent = "φ" + st.k;
+  // ===== 音の球たち: 4モード × φ^k (可聴域) を黄金角スパイラルで夜空に浮かべる =====
+  const phiBalls = [];
+  function buildPhiSky() {
+    const sky = document.getElementById("phi-sky");
+    if (!sky || phiBalls.length) return;
+    const notes = [];
+    Object.keys(PHI_THEORY).forEach(key => {
+      for (let k = 3; k <= 11; k++) {
+        const f = PHI_THEORY[key] * Math.pow(PHI, k);
+        if (f >= 140 && f <= 1250) notes.push({ key, k, f });
+      }
+    });
+    notes.sort((a, b) => a.f - b.f);
+    const GA = Math.PI * (3 - Math.sqrt(5)); // 黄金角 137.5°
+    notes.forEach((n, i) => {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "phi-ball " + PHI_MODE_CLS[n.key];
+      // 低い音ほど大きい球
+      const t = Math.log(n.f / 140) / Math.log(1250 / 140);
+      const size = Math.round(86 - 54 * t);
+      el.style.width = el.style.height = size + "px";
+      // 黄金角スパイラル配置 (ひまわりの種と同じ並び)
+      const r = Math.sqrt((i + 0.6) / notes.length) * 40;
+      const ang = i * GA;
+      el.style.left = (50 + r * Math.cos(ang)).toFixed(1) + "%";
+      el.style.top = (50 + r * Math.sin(ang) * 0.9).toFixed(1) + "%";
+      // ぷかぷか (個体差のある揺れ)
+      const seed = ((i * 9301 + 49297) % 233280) / 233280;
+      el.style.animationDuration = (2.6 + seed * 2.8).toFixed(2) + "s";
+      el.style.animationDelay = (-seed * 4).toFixed(2) + "s";
+      const ball = { key: n.key, k: n.k, freq: n.f, el };
+      el.addEventListener("click", () => {
+        strike(ball.freq, 0.14, 2.6);
+        flashBall(ball);
+      });
+      sky.appendChild(el);
+      phiBalls.push(ball);
+    });
   }
-
+  function flashBall(b) {
+    b.el.classList.add("hit");
+    setTimeout(() => b.el.classList.remove("hit"), 280);
+  }
+  // 実測値の更新に合わせて全球を再チューニング (renderData から呼ばれる)
   function buildPhiPads(modes) {
     if (modes) phiLastModes = modes;
-    const wrap = document.getElementById("phi-pads");
-    if (!wrap) return;
-    ["F1", "F2", "F3", "F4"].forEach(key => {
-      let st = phiState[key];
-      if (!st) {
-        const rin = document.createElement("div");
-        rin.className = "phi-rin";
-        rin.dataset.mode = key;
-        const pad = document.createElement("button");
-        pad.className = "phi-pad";
-        pad.type = "button";
-        const cushion = document.createElement("div");
-        cushion.className = "phi-cushion";
-        // 各モード個別の φ べき乗ステッパー
-        const step = document.createElement("div");
-        step.className = "phi-step";
-        const minus = document.createElement("button");
-        minus.type = "button"; minus.textContent = "−";
-        const val = document.createElement("span");
-        val.className = "ps-val";
-        const plus = document.createElement("button");
-        plus.type = "button"; plus.textContent = "＋";
-        step.appendChild(minus); step.appendChild(val); step.appendChild(plus);
-        rin.appendChild(pad);
-        rin.appendChild(cushion);
-        rin.appendChild(step);
-        wrap.appendChild(rin);
-        st = phiState[key] = {
-          pad, stepVal: val, bowl: null, freq: 440,
-          k: phiAutoK(MODE_INFO[key].theory),
-        };
-        pad.addEventListener("click", () => {
-          if (st.bowl) {
-            stopBowl(st.bowl); st.bowl = null;
-            st.pad.classList.remove("on");
-          } else {
-            st.bowl = startBowl(st.freq);
-            st.pad.classList.add("on");
-          }
-        });
-        minus.addEventListener("click", () => { if (st.k > 3) { st.k--; phiRefresh(key); } });
-        plus.addEventListener("click", () => { if (st.k < 12) { st.k++; phiRefresh(key); } });
-      }
-      phiRefresh(key);
-    });
+    buildPhiSky();
+    phiBalls.forEach(b => { b.freq = phiHzOf(b.key) * Math.pow(PHI, b.k); });
   }
   buildPhiPads(null);
 
-  // ===== ♪ おまかせ演奏 — 地球のメロディ =====
-  // いまの Schumann 4音 (F1-F4) × φ のべき乗でできる「黄金比の音の池」を、
-  // ゆっくりした酔歩でたどる。リズムも 1 : 1/φ : φ の黄金比。
-  // 時々 φ³ 上の音が重なって、割り切れない和音が生まれる。
+  // ===== ♪ AI メロディ =====
+  // 音の球の池を酔歩でたどる。リズムは 1 : 1/φ : φ の黄金比。
+  // 時々 φ³ 上の音が重なり、たまに低い地鳴りの一打。
   let melodyTimer = null;
   let melodyStep = 0;
   let melodyIdx = -1;
 
   function melodyPool() {
-    const pool = [];
-    ["F1", "F2", "F3", "F4"].forEach(key => {
-      const hz = phiHzOf(key);
-      for (let k = 4; k <= 11; k++) {
-        const v = hz * Math.pow(PHI, k);
-        if (v >= 140 && v <= 1250) pool.push({ key, v });
-      }
-    });
-    return pool.sort((a, b) => a.v - b.v);
+    return phiBalls;
   }
 
   // 一打ちの鐘: 立ち上がり一瞬 → ゆっくり減衰する正弦波
@@ -1518,32 +1443,25 @@
     o.start(); o.stop(ctx.currentTime + dur + 0.1);
   }
 
-  function flashRin(key) {
-    const st = phiState[key];
-    if (!st) return;
-    st.pad.classList.add("on");
-    if (!st.bowl) setTimeout(() => { if (!st.bowl) st.pad.classList.remove("on"); }, 750);
-  }
-
   const MELODY_RHYTHM = [1, 1, 0.618, 1.618, 1, 0.618, 1.618, 1]; // 黄金比の拍
   function melodyTick() {
     const pool = melodyPool();
     if (!pool.length) { melodyTimer = setTimeout(melodyTick, 1500); return; }
     if (melodyIdx < 0) melodyIdx = Math.floor(pool.length / 2);
-    // 酔歩: 池の中を -2〜+2 で漂う (端に来たら内側へ)
+    // 酔歩: 池の中を -2〜+2 で漂う
     melodyIdx += [-2, -1, -1, 0, 1, 1, 2][Math.floor(Math.random() * 7)];
     melodyIdx = Math.max(0, Math.min(pool.length - 1, melodyIdx));
-    const n = pool[melodyIdx];
-    strike(n.v, 0.13, 3.4);
-    flashRin(n.key);
+    const b = pool[melodyIdx];
+    strike(b.freq, 0.13, 3.4);
+    flashBall(b);
     // 3割の確率で φ³ 上あたりの音を淡く重ねる (神秘の和音)
     if (Math.random() < 0.3) {
       const j = Math.min(pool.length - 1, melodyIdx + 3 + Math.floor(Math.random() * 2));
-      if (j !== melodyIdx) { strike(pool[j].v, 0.07, 4.2); flashRin(pool[j].key); }
+      if (j !== melodyIdx) { strike(pool[j].freq, 0.07, 4.2); flashBall(pool[j]); }
     }
     // ごくたまに低い地鳴りの一打
     if (Math.random() < 0.12 && melodyIdx > 2) {
-      strike(pool[0].v, 0.09, 5.0); flashRin(pool[0].key);
+      strike(pool[0].freq, 0.09, 5.0); flashBall(pool[0]);
     }
     const beat = 1.35 * MELODY_RHYTHM[melodyStep % MELODY_RHYTHM.length];
     melodyStep++;
@@ -1555,12 +1473,12 @@
     if (melodyTimer) {
       clearTimeout(melodyTimer); melodyTimer = null;
       autoBtn.classList.remove("on");
-      autoBtn.textContent = "♪ おまかせ演奏 — 地球のメロディ";
+      autoBtn.textContent = "♪ AI メロディ";
     } else {
       getAudioCtx(); // ユーザー操作でオーディオ解錠
       melodyStep = 0; melodyIdx = -1;
       autoBtn.classList.add("on");
-      autoBtn.textContent = "■ 演奏をやめる";
+      autoBtn.textContent = "■ 停止";
       melodyTick();
     }
   });
