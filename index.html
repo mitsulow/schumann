@@ -957,7 +957,7 @@
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
           <div class="jst-imgbox">
-            <img src="https://sosrff.tsu.ru/new/sra.jpg" alt="振幅グラフ" onerror="this.onerror=null;this.src='https://sos70.ru/provider.php?file=sra.jpg'">
+            <img src="https://sos70.ru/provider.php?file=sra.jpg" alt="振幅グラフ">
             <div class="jst-cover"></div>
           </div>
           <div class="jst-below"></div>
@@ -977,7 +977,7 @@
       <div class="graph-image-wrap">
         <div class="jst-graph" data-metrics="line">
           <div class="jst-imgbox">
-            <img src="https://sosrff.tsu.ru/new/srq.jpg" alt="Q値グラフ" onerror="this.onerror=null;this.src='https://sos70.ru/provider.php?file=srq.jpg'">
+            <img src="https://sos70.ru/provider.php?file=srq.jpg" alt="Q値グラフ">
             <div class="jst-cover"></div>
           </div>
           <div class="jst-below"></div>
@@ -1589,10 +1589,10 @@
 
   // ============ 日本時刻オーバーレイ ============
   // 画像内の時刻目盛り (下端) を黒で覆い、同じ位置に JST を直接描く。
-  // ★時刻軸は UTC+8 (2026-07-02 実測校正: +7 だとデータが1時間「未来」になる。
-  //   観測サーバーが旧恒久サマータイム時代の設定のままと推定) = JST −1時間。
+  // 時刻軸はトムスク標準時 UTC+7 = JST −2時間 (画像は正常系の sos70 ミラーを使用。
+  //   sosrff 直配信は 2026-07-02 にサーバー時計故障で +1h & 日付10ヶ月ズレを起こした)
   // レイアウト実測値: プロット x 範囲 (3日=72時間) と、時刻ラベル帯の縦位置
-  const AXIS_UTC_OFFSET = 8;
+  const AXIS_UTC_OFFSET = 7;
   const RULER_METRICS = {
     // coverTop = 下端時刻ラベル帯の開始y / topH = 上端の日付表記帯の高さ (観測所側の日付はバグで狂っているため隠す)
     line: { w: 1006, h: 340, x0: 71, x1: 935, coverTop: 311, topH: 28 },  // srf / sra / srq 共通
