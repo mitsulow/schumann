@@ -55,7 +55,7 @@
   /* ★ 黒バンド (ロゴ〜地球儀〜鼠色グラフ): ここだけ宇宙 */
   .hero-dark {
     background: linear-gradient(180deg, #03050c 0%, #05070f 60%, #070a14 100%);
-    padding: 0.7rem 0 1rem;
+    padding: 0.4rem 0 0.9rem;
   }
   .hero-inner { max-width: 1200px; margin: 0 auto; }
   .hero-dark .last-update { color: #6d7288; }
@@ -102,7 +102,7 @@
   #fold-sound { order: 1; }
   #fold-mag { order: 2; }
   footer { order: 3; }
-  header { text-align: center; padding: 0.4rem 0 0.9rem; }
+  header { text-align: center; padding: 0.15rem 0 0.4rem; }
   .mmm-logo {
     display: flex;
     align-items: center;
@@ -350,7 +350,7 @@
     font-size: 0.7rem; font-style: normal;
     color: var(--text-dim); letter-spacing: 0.2em;
   }
-  .graph-section { display: grid; gap: 2rem; margin-bottom: 2rem; }
+  .graph-section { display: grid; gap: 0.8rem; margin-bottom: 1rem; }
   .graph-card {
     background: var(--bg-card); backdrop-filter: blur(10px);
     border: 1px solid var(--border); border-radius: 16px;
@@ -360,10 +360,10 @@
     .graph-card { grid-template-columns: 1.3fr 1fr; }
   }
   .graph-image-wrap {
-    position: relative; background: #000; padding: 1rem;
+    position: relative; background: #000; padding: 0.4rem;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    min-height: 200px; gap: 0.75rem;
+    min-height: 0; gap: 0.2rem;
   }
   .graph-image-wrap img {
     max-width: 100%; max-height: 400px; height: auto;
@@ -446,10 +446,7 @@
     position: absolute; top: 50%; transform: translate(-50%, -50%);
     color: #e8c878; font-weight: 700; white-space: nowrap; line-height: 1;
   }
-  .jst-below {
-    position: relative; width: 100%; height: 1.6rem; margin-top: 2px;
-    font-family: "JetBrains Mono", monospace; user-select: none; line-height: 1;
-  }
+  .jst-below { display: none; } /* ▲今表記は廃止 (上下を詰めるため) */
   .jst-below .jb-date {
     position: absolute; top: 0.2rem; transform: translateX(-50%);
     font-size: 0.66rem; color: var(--accent-gold); font-weight: 700; white-space: nowrap;
@@ -494,19 +491,14 @@
     line-height: 1;
   }
   .globe-f1 .gf1-unit { margin-left: 0.12em; font-size: 0.7em; }
+  /* ▶ の真下から「※…」が始まるよう、行＋注釈をひとかたまりで左揃え */
+  .gf1-block { display: inline-block; text-align: left; }
   .gf1-note {
-    display: inline-block;
-    font-size: 0.68rem;
+    display: block;
+    font-size: 0.66rem;
     color: #7d829a;
-    margin-top: 1.1rem;
+    margin-top: 0.45rem;
     letter-spacing: 0.04em;
-  }
-  .gf1-leader {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
   }
   .globe-f1 .gf1-row {
     display: flex;
@@ -515,15 +507,15 @@
     gap: 0.9rem;
   }
   .gf1-play {
-    width: clamp(3rem, 10vw, 3.8rem);
-    height: clamp(3rem, 10vw, 3.8rem);
+    width: clamp(1.9rem, 6vw, 2.3rem);
+    height: clamp(1.9rem, 6vw, 2.3rem);
     border-radius: 50%;
-    border: 2px solid rgba(12, 138, 104, 0.6);
+    border: 1.5px solid rgba(12, 138, 104, 0.6);
     background: radial-gradient(circle at 36% 32%, #ffffff, #d8efe6 60%, #b8dfd0);
     color: #0c8a68;
-    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    font-size: clamp(0.72rem, 2.4vw, 0.9rem);
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(12, 138, 104, 0.25);
+    box-shadow: 0 3px 10px rgba(12, 138, 104, 0.25);
     transition: transform 0.12s, box-shadow 0.4s;
     flex-shrink: 0;
     padding: 0;
@@ -821,10 +813,6 @@
     <header>
       <div class="site-title">SCHUMANN RESONANCE</div>
       <div class="mmm-logo"><span class="bolt">⚡</span><span class="mmm-text">MASTER MIND MEMBERS</span><span class="bolt">⚡</span></div>
-      <div class="last-update">
-        <span class="live-dot"></span>
-        <span id="last-update">Loading...</span>
-      </div>
     </header>
 
     <!-- 地球儀: 世界の雷がリアルタイムで光る (セクション分けなし、黒に直置き) -->
@@ -834,12 +822,13 @@
 
     <div class="globe-f1">
       <span class="gf1-label">現在のシューマン共振の値</span>
-      <div class="gf1-row">
-        <button id="gf1-play" class="gf1-play" type="button">▶</button>
-        <span class="gf1-value" id="globe-f1-value">—.——</span><span class="gf1-value gf1-unit">Hz</span>
+      <div class="gf1-block">
+        <div class="gf1-row">
+          <button id="gf1-play" class="gf1-play" type="button">▶</button>
+          <span class="gf1-value" id="globe-f1-value">—.——</span><span class="gf1-value gf1-unit">Hz</span>
+        </div>
+        <div class="gf1-note" id="gf1-note">※<span id="gf1-aud">—</span>Hzの可聴域に変換した音</div>
       </div>
-      <div class="gf1-note" id="gf1-note">6オクターブ上の可聴域 <span id="gf1-aud">—</span>Hz の音が鳴ります</div>
-      <svg class="gf1-leader" id="gf1-leader"></svg>
     </div>
 
     <div class="spark-wrap">
@@ -1023,6 +1012,7 @@
   </details>
 
   <footer>
+    <p><span class="live-dot"></span><span id="last-update">Loading...</span></p>
     <p>DATA SOURCE: Tomsk State University (sos70.ru) / ANALYSIS: Deterministic Pixel Extraction v6</p>
     <p>PRIMARY: Line Graph (srf.jpg) · UPDATED EVERY 15 MINUTES</p>
     <p style="margin-top:1rem;">
@@ -1135,7 +1125,9 @@
       year: "numeric", month: "2-digit", day: "2-digit",
       hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo"
     }).format(ts);
-    document.getElementById("last-update").textContent = "UPDATED " + jst + " JST";
+    // 最終読み取り時刻 = トムスクのグラフを最後に自動読み取りした時刻 (15分ごと)
+    document.getElementById("last-update").textContent =
+      "最終読み取り " + jst + " JST ・ 15分ごと自動更新";
     renderF1(data);
     renderModes(data.modes);
     buildPhiPads(data.modes);
@@ -1177,7 +1169,6 @@
     if (gf1Bowl) retuneBowl(gf1Bowl, gf1Freq);
     const aud = document.getElementById("gf1-aud");
     if (aud) aud.textContent = gf1Freq.toFixed(1);
-    drawGf1Leader();
     const confClass = conf >= 75 ? "high" : conf >= 50 ? "mid" : "low";
     fill.className = "confidence-fill " + confClass;
     fill.style.width = conf + "%";
@@ -1501,29 +1492,6 @@
     }
   });
 
-  // ===== 注釈線: 「音が鳴ります」の文字の上端から ▶ ボタンへ =====
-  function drawGf1Leader() {
-    const box = document.querySelector(".globe-f1");
-    const svg = document.getElementById("gf1-leader");
-    const btn = document.getElementById("gf1-play");
-    const note = document.getElementById("gf1-note");
-    if (!box || !svg || !btn || !note) return;
-    const b = box.getBoundingClientRect();
-    const r = btn.getBoundingClientRect();
-    const n = note.getBoundingClientRect();
-    if (!b.width) return;
-    svg.setAttribute("viewBox", "0 0 " + b.width + " " + b.height);
-    const x1 = n.left - b.left + 10;              // 注釈テキストの左上あたり
-    const y1 = n.top - b.top - 2;
-    const x2 = r.left - b.left + r.width / 2;     // ▶ ボタンの真下
-    const y2 = r.bottom - b.top + 3;
-    svg.innerHTML = '<path d="M ' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2 +
-      '" stroke="rgba(82,250,140,0.45)" stroke-width="1" fill="none"/>' +
-      '<circle cx="' + x2 + '" cy="' + y2 + '" r="2" fill="rgba(82,250,140,0.6)"/>';
-  }
-  window.addEventListener("resize", drawGf1Leader);
-  window.addEventListener("load", drawGf1Leader);
-
   // ===== トップの ▶ ボタン: 今の F1 を可聴域 (6オクターブ上 = ×64) で鳴らす =====
   let gf1Bowl = null;
   let gf1Freq = 7.83 * 64;
@@ -1643,7 +1611,7 @@
       // フォントは表示幅に応じてスケール
       const dispW = img.clientWidth || 700;
       const dispH = img.clientHeight || dispW * m.h / m.w;
-      const fs = Math.max(8.5, Math.min(14, dispW / 55));
+      const fs = Math.max(7.5, Math.min(12, dispW / 64)); // 時刻: 一段階小さく
       cover.style.fontSize = fs + "px";
       // 黒カバー: 画像内ラベル帯を隠しつつ、文字が必ず収まる高さを確保
       // (スペクトログラムはラベル帯が薄いので、スマホでは帯より文字サイズが優先)
@@ -1658,8 +1626,9 @@
         coverTop.className = "jst-cover-top";
         wrap.querySelector(".jst-imgbox").appendChild(coverTop);
       }
-      coverTop.style.fontSize = fs + "px";
-      coverTop.style.height = Math.max(m.topH / m.h * dispH, fs + 4) + "px";
+      const fsDate = Math.max(7, fs * 0.85); // 日付はさらに小さく
+      coverTop.style.fontSize = fsDate + "px";
+      coverTop.style.height = Math.max(m.topH / m.h * dispH, fsDate + 3) + "px";
       coverTop.innerHTML = "";
 
       const tag = document.createElement("div");
@@ -1688,15 +1657,7 @@
         el.textContent = h;
         cover.appendChild(el);
       }
-      // 「今」マーカー (▲の先端が正確に現在位置に来るよう縦積み)
-      const gNow = (now.getTime() - day1Utc) / 3600e3;
-      if (gNow >= 0 && gNow <= 72) {
-        const nowEl = document.createElement("div");
-        nowEl.className = "jb-now";
-        nowEl.style.left = pos(gNow) + "%";
-        nowEl.innerHTML = "▲<br>今";
-        below.appendChild(nowEl);
-      }
+      // (▲今マーカーは上下を詰めるため廃止)
     });
   }
 
