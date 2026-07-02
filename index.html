@@ -2086,16 +2086,21 @@
     }, 540);
   }
   function tickRoll() {
-    const steps = f1Trend > 0 ? [0, 1, 1, 1, 2, -1]
-                : f1Trend < 0 ? [0, -1, -1, -1, -2, 1]
-                : [-1, 0, 0, 0, 1];
-    rollVal += steps[Math.floor(Math.random() * steps.length)];
-    if (rollVal > 9) rollVal = 8;
-    if (rollVal < 0) rollVal = 1;
+    // トレンドで軽く偏らせつつ、両方向に自由に歩く (端に当たったら反射)
+    const steps = f1Trend > 0 ? [-1, 0, 1, 1, 2]
+                : f1Trend < 0 ? [-2, -1, -1, 0, 1]
+                : [-2, -1, 0, 1, 2];
+    let next = rollVal + steps[Math.floor(Math.random() * steps.length)];
+    if (next > 9) next = 9 - (next - 9);   // 天井で反射
+    if (next < 0) next = -next;            // 床で反射
+    if (next === rollVal) next = Math.max(0, Math.min(9, rollVal + (Math.random() < 0.5 ? -1 : 1)));
+    rollVal = next;
     rollDigit(rollVal);
-    setTimeout(tickRoll, 1700 + Math.random() * 2300);
+    // 誠実ペース: 約3分に1回 (±20秒のゆらぎ)
+    setTimeout(tickRoll, 160000 + Math.random() * 40000);
   }
-  setTimeout(tickRoll, 2600);
+  rollVal = 3 + Math.floor(Math.random() * 5);
+  setTimeout(tickRoll, 8000);
 
   // ===== トップの ▶ ボタン: 今の F1 を可聴域 (6オクターブ上 = ×64) で鳴らす =====
   let gf1Bowl = null;
